@@ -6,20 +6,39 @@
 </head>
 <body>
 	<h2>Search for a Member</h2>
-	<div class="container">
-		<form action="/DisplayAllMembers" method="POST">
-			<input type="radio" name="member" value="premember">Premium
-			Member<br> <input type="radio" name="member" value="simpmember">Simple
-			Member<br> First Name: <input type="text" name="firstName"
-				id="fname"></input><br> <br> Last Name: <input type="text"
-				name="lastName" id="lname"></input><br> <br> Address: <input
-				type="text" name="address" id="address"></input><br> <br>
-			City: <input type="text" name="city" id="city"></input><br> <br>
-			State: <input type="text" name="state" id="state"></input><br> <br>
-			ZipCode: <input type="text" name="zipCode" id="zipCode"></input><br>
-			<br> MembershipNo : <input type="text" name="memNum" id="memNum"></input><br>
-			<br> <input type="submit" name="submit" value="Search Member"></input>
-	</div>
+
+	<form class="navbar-form navbar-left" role="search"
+		action="/DisplayAllMembers" method="POST">
+		<div class="form-group">
+			<div class="radio">
+				<label> <input type="radio" name="member" id="premember"
+					value="premember" checked> Premium Member
+				</label>
+			</div>
+			<div class="radio">
+				<label> <input type="radio" name="member" id="simpmember"
+					value="simpmember"> Simple Member
+				</label>
+			</div>
+			<br> First Name: <input type="text" name="firstName" id="fname"
+				class="form-control" placeholder="First Name"></input><br> <br>
+			Last Name: <input type="text" name="lastName" id="lname"
+				class="form-control" placeholder="Last Name"></input><br> <br>
+			Address: <input type="text" name="address" id="address"
+				class="form-control" placeholder="123 Somewhere St"></input><br>
+			<br> City: <input type="text" name="city" id="city"
+				class="form-control" placeholder="Your City"></input><br> <br>
+			State: <input type="text" name="state" id="state"
+				class="form-control" placeholder="Your State"></input><br> <br>
+			ZipCode: <input type="text" name="zipCode" id="zipCode"
+				class="form-control" placeholder="Zip Code"></input><br> <br>
+			MembershipNo : <input type="text" name="memNum" id="memNum"
+				class="form-control" placeholder="Your Membership number"></input><br>
+			<button type="submit" class="btn btn-default" value="Search Member">Submit</button>
+		</div>
+
 	</form>
+
+
 </body>
 </html>

@@ -5,13 +5,21 @@
 
 </head>
 <body>
-	<h2>Home Page</h2>
-	<div>
-		<form action="/loginPage">
-			<input type="submit" name="submit" value="Sign Out"
-				style="float: right;" />
-		</form>
+	<div class="jumbotron">
+		<div class="container">
+			<h1 class="text-center">Home Page</h1>
+			<br>
+			<p class="text-left">Please Select Options</p>
+		</div>
+		<div class='row'>
+			<form action="/loginPage">
+				<input class="col-md-4 col-md-offset-4" type="submit" name="submit"
+					value="Sign Out" style="float: right;" />
+			</form>
+		</div>
 	</div>
+
+
 	<div class="jumbotron">
 
 		<form action="/searchCustomer" method="post">
