@@ -15,10 +15,10 @@ var cachesize = 100;
 
 var title = 'EJS template with Node.JS';
 var data = 'Data from node';
-var mysql = require('mysql');
+var mysql_connection = require('mysql');
 
 //----MYSQL Connection----//
-var connection = mysql.createConnection({
+var connection = mysql_connection.createConnection({
 	host     : 'localhost',
 	user     : 'root',
 	password : '',

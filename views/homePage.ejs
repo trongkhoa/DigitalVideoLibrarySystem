@@ -1,16 +1,17 @@
-<% include bootstrap.ejs%>< html>
+<% include bootstrap.ejs %>
+<html>
 <head>
 <title>homePage</title>
 
 </head>
 <body>
 	<h2>Home Page</h2>
-
-	<form action="/loginPage">
-		<input type="submit" name="submit" value="Sign Out"
-			style="float: right;" />
-	</form>
-
+	<div>
+		<form action="/loginPage">
+			<input type="submit" name="submit" value="Sign Out"
+				style="float: right;" />
+		</form>
+	</div>
 	<div class="jumbotron">
 
 		<form action="/searchCustomer" method="post">
