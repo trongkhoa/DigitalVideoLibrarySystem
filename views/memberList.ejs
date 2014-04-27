@@ -1,0 +1,42 @@
+<% include bootstrap.ejs %>
+<html>
+<head>
+<title>Search Member</title>
+
+</head>
+<body>
+	<h2>Member List</h2>
+	<table class="table table-bordered table-hover">
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Membership No</th>
+			<th>Member Type</th>
+			<th>Address</th>
+			<th>City</th>
+			<th>State</th>
+			<th>Zip Code</th>
+	
+			
+		</tr>
+		<% for(var i=0; i
+		<members.length; i++){
+		%>
+		<tr>
+			<td><%= members[i].fname %></td>
+			<td><%= members[i].lname %></td>
+			<td><%= members[i].membershipno %></td>
+			<td><%= members[i].membertype %></td>
+			<td><%= members[i].address %></td>
+			<td><%= members[i].city %></td>
+			<td><%= members[i].state %></td>
+			<td><%= members[i].zipcode %></td>
+	
+
+		</tr>
+
+		<% } %> 
+	</table>
+
+</body>
+</html>

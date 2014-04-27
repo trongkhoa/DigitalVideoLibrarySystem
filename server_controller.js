@@ -176,9 +176,6 @@ app.post('/DisplayAllMovies', function(req,res){
 	if (connection){
 		//Catching parameters and check if they are available or not
 		var movieName = req.param("movieName");
-
-		//and others
-
 		
 		var movieBanner = req.param("movieBanner");
 		
@@ -189,7 +186,6 @@ app.post('/DisplayAllMovies', function(req,res){
 		var availableCopies = req.param("availableCopies");
 		
 		var rentAmount = req.param("rent");
-
 		
 		//create the query for each one
 		var query;
@@ -201,13 +197,11 @@ app.post('/DisplayAllMovies', function(req,res){
 			query = "select * from movies where name like " + connection.escape(movieName);
 			//if you get error, copy the line on the console log and check in your SQL terminal
 			console.log("SQL search for Movie Name:" + query);
-
 		} else if(movieBanner){
 			movieBanner = movieBanner + "%";
 			console.log(movieBanner);
 			query = "select * from movies where bannerName like " + connection.escape(movieBanner);
 			console.log("SQL search for Movie Banner:" + query);
-
 			
 		} else if(releaseDate){
 			releaseDate = releaseDate + "%";
@@ -274,6 +268,108 @@ app.post('/DisplayAllMovies', function(req,res){
 
 
 
-
+//-----------Search for All Members------//
+app.post('/DisplayAllMembers', function(req,res){
+	//Checking the MYSQL connection is available
+	if (connection){
+		//Catching parameters and check if they are available or not
+		var firstName = req.param("firstName");
+		
+		var lastName = req.param("lastName");
+		
+		var membershipNo = req.param("memNum")
+		
+		var address = req.param("address");
+		
+		var city = req.param("city");
+		
+		var state = req.param("state");
+		
+		var zipcode = req.param("zipcode");
+		
+		//create the query for each one
+		var query;
+		if (firstName){
+			console.log("User want to see the Movie Name:" + firstName);
+			firstName = firstName + "%";
+			console.log(firstName);
+			//query to match the string input using LIKE in mySQL
+			query = "select * from customers where fname like " + connection.escape(firstName);
+			//if you get error, copy the line on the console log and check in your SQL terminal
+			console.log("SQL search for First Name:" + query);
+		} else if(lastName){
+			lastName = lastName + "%";
+			console.log(lastName);
+			query = "select * from customers where lname like " + connection.escape(lastName);
+			console.log("SQL search for lastName:" + query);
+			
+		}else if(membershipNo){
+			membershipNo = membershipNo + "%";
+			console.log(membershipNo);
+			query = "select * from customers where membershipno like " + connection.escape(membershipNo);
+			console.log("SQL search for membershipNo:" + query);
+			
+		}else if(address){
+			address = address + "%";
+			console.log(address);
+			query = "select * from customers where address like " + connection.escape(address);
+			console.log("SQL search for address:" + query);
+			
+		}else if(city){
+			city = city + "%";
+			console.log(city);
+			query = "select * from customers where city like " + connection.escape(city);
+			console.log("SQL search for city:" + query);
+			
+		}else if(state){
+			state = state + "%";
+			console.log(state);
+			query = "select * from customers where state like " + connection.escape(state);
+			console.log("SQL search for state:" + query);
+			
+		}else if(zipcode){
+			zipcode = zipcode + "%";
+			console.log(zipcode);
+			query = "select * from customers where zipcode like " + connection.escape(zipcode);
+			console.log("SQL search for zipcode:" + query);
+		}
+		
+		//Display all movies
+		else{
+			
+			query = "select * from customers";
+		}
+		
+		//Query and render the output of the DB to JSON objects
+		connection.query(query, function(err, members){
+			console.log(members);
+			if (!err){
+			ejs.renderFile('./views/memberList.ejs',
+			        {"members":members}, //<--- JSON passed to EJS
+					function(err, result) {
+						// render on success
+						if (!err) {
+							res.end(result);
+						}
+						// render or error
+						else {
+							res.end('An error occurred');
+							console.log(err);
+						}
+					});
+			
+			}
+			else{
+				console.log("Something wrong with DB MYSQL");
+				
+			}
+		});
+		
+		
+	}
+	
+	
+	
+});
 
 app.listen(4000);
