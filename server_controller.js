@@ -1,7 +1,7 @@
 /**
  * New node file
  */
-//async = require("async")
+
 var application_root = __dirname,
 express = require("express"),
 path = require("path"),
@@ -9,9 +9,6 @@ ejs = require("ejs");
 var app = express();
 var request = require("request");
 var mysql = require("./mysql_connect");
-//var mysql = require("./connectionPooling");
-var usercache = {};
-var cachesize = 100;
 
 var title = 'EJS template with Node.JS';
 var data = 'Data from node';
@@ -26,7 +23,6 @@ var connection = mysql_connection.createConnection({
 	database: 'VideoLibraryManagement'
 });
 connection.connect();
-
 
 app.use(express.cookieParser());
 app.use(express.session({secret: '1234567890QWERTY'}));
@@ -76,8 +72,6 @@ app.configure(function () {
 						});
 			}
 			else{
-				//console.log(userResults[0].timeStamp);
-				//req.session.userName = userResults[0].uname;
 				res.redirect('/home');
 			}
 		},req.param('userName'),req.param('Password'));
@@ -176,13 +170,22 @@ app.post('/searchMovie', function(req,res){
 	
 });
 
-//-----------DisplayAllMovies------//
+//-----------Search for All Movies------//
 app.post('/DisplayAllMovies', function(req,res){
 	//Checking the MYSQL connection is available
 	if (connection){
 		//Catching parameters and check if they are available or not
 		var movieName = req.param("movieName");
-		//and others
+		
+		var movieBanner = req.param("movieBanner");
+		
+		var releaseDate = req.param("rdate");
+		
+		var category = req.param("category");
+		
+		var availableCopies = req.param("availableCopies");
+		
+		var rentAmount = req.param("rent");
 		
 		//create the query for each one
 		var query;
@@ -194,12 +197,42 @@ app.post('/DisplayAllMovies', function(req,res){
 			query = "select * from movies where name like " + connection.escape(movieName);
 			//if you get error, copy the line on the console log and check in your SQL terminal
 			console.log("SQL search for Movie Name:" + query);
-		}else{
+		} else if(movieBanner){
+			movieBanner = movieBanner + "%";
+			console.log(movieBanner);
+			query = "select * from movies where bannerName like " + connection.escape(movieBanner);
+			console.log("SQL search for Movie Banner:" + query);
+			
+		} else if(releaseDate){
+			releaseDate = releaseDate + "%";
+			console.log(releaseDate);
+			query = "select * from movies where releaseDate like " + connection.escape(releaseDate);
+			console.log("SQL search for release Date:" + query);
+			
+		}else if(category){
+			category = category + "%";
+			console.log(category);
+			query = "select * from movies where category like " + connection.escape(category);
+			console.log("SQL search for category:" + query);
+			
+		}else if(availableCopies){
+			availableCopies = availableCopies + "%";
+			console.log(availableCopies);
+			query = "select * from movies where availableCopies like " + connection.escape(availableCopies);
+			console.log("SQL search for available copies:" + query);
+			
+		}else if(rentAmount){
+			rentAmount = rentAmount + "%";
+			console.log(rentAmount);
+			query = "select * from movies where rentAmount like " + connection.escape(rentAmount);
+			console.log("SQL search for rent Amount:" + query);
+		}
+		
+		//Display all movies
+		else{
 			
 			query = "select * from movies";
 		}
-		
-		
 		
 		//Query and render the output of the DB to JSON objects
 		connection.query(query, function(err, movies){
