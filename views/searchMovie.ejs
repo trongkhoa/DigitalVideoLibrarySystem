@@ -1,22 +1,19 @@
+<% include bootstrap.ejs%>
 <html>
 <head>
 <title>Search Movie</title>
-<style type="text/css">
-.container{
-width:200px;
-}
-</style>
 </head>
 <body>
-<h2>Search for a Movie</h2>
-<div class="container">
-<form action="/DisplayAllMovies" method="POST">
-Movie Name: <input type="text" name="movieName" id="mname"></input><br><br>
-Movie Banner: <input type="text" name="movieBanner" id="mbanner"></input><br><br>
-Release Date: <input type="text" name="rdate" id="rdate"></input><br><br>
-Category: <input type="text" name="category" id="category"></input><br><br>
-<input type="submit" name="submit" value="Search Movie"/>
-</div>
-</form>
+	<h2>Search for a Movie</h2>
+	<div class="container">
+		<form action="/DisplayAllMovies" method="POST">
+			Movie Name: <input type="text" name="movieName" id="mname"></input><br>
+			<br> Movie Banner: <input type="text" name="movieBanner"
+				id="mbanner"></input><br>
+			<br> Release Date: <input type="text" name="rdate" id="rdate"></input><br>
+			<br> Category: <input type="text" name="category" id="category"></input><br>
+			<br> <input type="submit" name="submit" value="Search Movie" />
+	</div>
+	</form>
 </body>
 </html>

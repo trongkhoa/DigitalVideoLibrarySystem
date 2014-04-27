@@ -1,34 +1,32 @@
-<html>
+<% include bootstrap.ejs%>< html>
 <head>
 <title>homePage</title>
-<style type="text/css">
-.container{
-width:200px;
-}
-</style>
+
 </head>
 <body>
-<h2>Home Page </h2>
+	<h2>Home Page</h2>
 
-<form action="/loginPage">
-<input type="submit" name="submit" value="Sign Out" style="float:right;"/>
-</form>
+	<form action="/loginPage">
+		<input type="submit" name="submit" value="Sign Out"
+			style="float: right;" />
+	</form>
 
-<div class="container">
+	<div class="jumbotron">
 
-<form action="/searchCustomer" method="post">
-<label> Search Member </label>
-<input type="submit" name="submit" value="Search Member"/>
-</form>
-<form action="/addCustomer" method="post">
-Create Member:<input type="submit" name="submit" value="Create Member"/>
-</form>
-<form action="/searchMovie" method="post">
-Search Movie:<input type="submit" name="submit" value="Search Movie"/>
-</form>
-<form action="/addMovie" method="post">
-Create Movie:<input type="submit" name="submit" value="Create Movie"/>
-</form>
-</div>
+		<form action="/searchCustomer" method="post">
+			<label> Search Member </label> <input type="submit" name="submit"
+				value="Search Member" />
+		</form>
+		<form action="/addCustomer" method="post">
+			Create Member:<input type="submit" name="submit"
+				value="Create Member" />
+		</form>
+		<form action="/searchMovie" method="post">
+			Search Movie:<input type="submit" name="submit" value="Search Movie" />
+		</form>
+		<form action="/addMovie" method="post">
+			Create Movie:<input type="submit" name="submit" value="Create Movie" />
+		</form>
+	</div>
 </body>
 </html>
