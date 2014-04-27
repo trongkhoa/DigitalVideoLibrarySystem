@@ -16,12 +16,10 @@
 			<th>City</th>
 			<th>State</th>
 			<th>Zip Code</th>
-	
-			
+
+
 		</tr>
-		<% for(var i=0; i
-		<members.length; i++){
-		%>
+		<% for(var i=0; i < members.length; i++){ %>
 		<tr>
 			<td><%= members[i].fname %></td>
 			<td><%= members[i].lname %></td>
@@ -31,11 +29,11 @@
 			<td><%= members[i].city %></td>
 			<td><%= members[i].state %></td>
 			<td><%= members[i].zipcode %></td>
-	
+
 
 		</tr>
 
-		<% } %> 
+		<% } %>
 	</table>
 
 </body>
