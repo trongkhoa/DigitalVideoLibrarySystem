@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Search Movie</title>
+<style type="text/css">
+.container{
+width:200px;
+}
+</style>
+</head>
+<body>
+<h2>Movie List</h2>
+<table>
+<tr>
+  <th>Movie Name</th>
+  <th>Banner Name</th>
+  <th>Release Year</th> 
+  <th>Category</th>
+  <th>Rent</th>
+  <th>Available Copies:</th>
+</tr>
+<% 
+	for(var i=0; i<movies.length; i++){
+	%>	
+  <tr>
+  <td><%= movies[i].name %></td>
+  <td><%= movies[i].bannerName %></td>
+  <td><%= movies[i].releaseDate %></td>
+  <td><%= movies[i].category %></td>
+  <td><%= movies[i].rentAmount %></td>
+  <td><%= movies[i].availableCopies %></td>
+  </tr>
+	
+	<%
+	
+	}
+
+%>
+
+</table>
+
+</body>
+</html>

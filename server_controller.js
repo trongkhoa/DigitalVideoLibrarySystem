@@ -15,6 +15,17 @@ var cachesize = 100;
 
 var title = 'EJS template with Node.JS';
 var data = 'Data from node';
+var mysql = require('mysql');
+
+//----MYSQL Connection----//
+var connection = mysql.createConnection({
+	host     : 'localhost',
+	user     : 'root',
+	password : '',
+	port: '3306',
+	database: 'VideoLibraryManagement'
+});
+connection.connect();
 
 
 app.use(express.cookieParser());
@@ -165,6 +176,62 @@ app.post('/searchMovie', function(req,res){
 	
 });
 
+//-----------DisplayAllMovies------//
+app.post('/DisplayAllMovies', function(req,res){
+	//Checking the MYSQL connection is available
+	if (connection){
+		//Catching parameters and check if they are available or not
+		var movieName = req.param("movieName");
+		//and others
+		
+		//create the query for each one
+		var query;
+		if (movieName){
+			console.log("User want to see the Movie Name:" + movieName);
+			movieName = movieName + "%";
+			console.log(movieName);
+			//query to match the string input using LIKE in mySQL
+			query = "select * from movies where name like " + connection.escape(movieName);
+			//if you get error, copy the line on the console log and check in your SQL terminal
+			console.log("SQL search for Movie Name:" + query);
+		}else{
+			
+			query = "select * from movies";
+		}
+		
+		
+		
+		//Query and render the output of the DB to JSON objects
+		connection.query(query, function(err, movies){
+			console.log(movies);
+			if (!err){
+			ejs.renderFile('./views/movieList.ejs',
+			        {"movies":movies}, //<--- JSON passed to EJS
+					function(err, result) {
+						// render on success
+						if (!err) {
+							res.end(result);
+						}
+						// render or error
+						else {
+							res.end('An error occurred');
+							console.log(err);
+						}
+					});
+			
+			}
+			else{
+				console.log("Something wrong with DB MYSQL");
+				
+			}
+		});
+		
+		
+	}
+	
+	
+	
+});
 
 
 
