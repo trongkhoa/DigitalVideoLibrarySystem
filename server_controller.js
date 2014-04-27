@@ -176,10 +176,9 @@ app.post('/DisplayAllMovies', function(req,res){
 	if (connection){
 		//Catching parameters and check if they are available or not
 		var movieName = req.param("movieName");
-<<<<<<< HEAD
-		var releaseDate = req.param("");
+
 		//and others
-=======
+
 		
 		var movieBanner = req.param("movieBanner");
 		
@@ -190,7 +189,7 @@ app.post('/DisplayAllMovies', function(req,res){
 		var availableCopies = req.param("availableCopies");
 		
 		var rentAmount = req.param("rent");
->>>>>>> 723a3ead9ead2b329c72b5c8c35bea34bc3e5290
+
 		
 		//create the query for each one
 		var query;
@@ -202,16 +201,13 @@ app.post('/DisplayAllMovies', function(req,res){
 			query = "select * from movies where name like " + connection.escape(movieName);
 			//if you get error, copy the line on the console log and check in your SQL terminal
 			console.log("SQL search for Movie Name:" + query);
-<<<<<<< HEAD
-		}
-		else{
-=======
+
 		} else if(movieBanner){
 			movieBanner = movieBanner + "%";
 			console.log(movieBanner);
 			query = "select * from movies where bannerName like " + connection.escape(movieBanner);
 			console.log("SQL search for Movie Banner:" + query);
->>>>>>> 723a3ead9ead2b329c72b5c8c35bea34bc3e5290
+
 			
 		} else if(releaseDate){
 			releaseDate = releaseDate + "%";
