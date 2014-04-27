@@ -4,15 +4,21 @@
 <title>Search Movie</title>
 </head>
 <body>
-	<h2>Search for a Movie</h2>
+
+	<h1>
+		Search for a Movie <span class="glyphicon glyphicon-search"></span>
+	</h1>
 	<div class="container">
 		<form action="/DisplayAllMovies" method="POST">
-			Movie Name: <input type="text" name="movieName" id="mname"></input><br>
-			<br> Movie Banner: <input type="text" name="movieBanner"
-				id="mbanner"></input><br>
-			<br> Release Date: <input type="text" name="rdate" id="rdate"></input><br>
-			<br> Category: <input type="text" name="category" id="category"></input><br>
-			<br> <input type="submit" name="submit" value="Search Movie" />
+			<span class="glyphicon glyphicon-film"></span> Movie Name: <input
+				type="text" name="movieName" id="mname"></input><br> <br>
+			<span class="glyphicon glyphicon-book"></span>Movie Banner: <input
+				type="text" name="movieBanner" id="mbanner"></input><br> <br>
+			<span class="glyphicon glyphicon-calendar"> Release Date: <input
+				type="text" name="rdate" id="rdate"></input><br> <br> <span
+				class="glyphicon glyphicon-folder-open"> Category: <input
+					type="text" name="category" id="category"></input><br> <br>
+					<input type="submit" name="submit" value="Search Movie" />
 	</div>
 	</form>
 </body>

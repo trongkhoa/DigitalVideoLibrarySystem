@@ -182,6 +182,7 @@ app.post('/DisplayAllMovies', function(req,res){
 	if (connection){
 		//Catching parameters and check if they are available or not
 		var movieName = req.param("movieName");
+		var releaseDate = req.param("");
 		//and others
 		
 		//create the query for each one
@@ -194,7 +195,8 @@ app.post('/DisplayAllMovies', function(req,res){
 			query = "select * from movies where name like " + connection.escape(movieName);
 			//if you get error, copy the line on the console log and check in your SQL terminal
 			console.log("SQL search for Movie Name:" + query);
-		}else{
+		}
+		else{
 			
 			query = "select * from movies";
 		}
