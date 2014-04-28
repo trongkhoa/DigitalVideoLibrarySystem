@@ -208,6 +208,45 @@ app.post('/searchMovie', function(req,res){
 	
 });
 
+
+//-----------Edit a Member-----------//
+app.post('/editMember', function(req,res){
+	var userInfo = req.param("member");
+	console.log("Edit member: " + userInfo);
+	res.send("Successfully edit the member" + userInfo);
+	
+});
+//-----------Delete a Member-----------//
+app.post('/deleteMember', function(req,res){
+	var memberNo = req.param("member");
+	console.log("Edit member: " + memberNo);
+	var query = 'UPDATE  `videolibrarymanagement`.`customers` SET  `status` =  \'inactive\' WHERE  `customers`.`membershipno` = ' + connection.escape(memberNo);
+	connection.query(query,function(err,result){
+		if (!err){
+			console.log("users is inactive now: " + result);
+		}
+		else{
+			console.log("error can't edit user's status: " + err);
+		}
+		
+	});
+	res.send("Successfully edit the member" + memberNo);
+	
+});
+//-----------Issue a Movie-----------//
+app.post('/issueMovie', function(req,res){
+	var userInfo = req.param("member");
+	console.log("Edit member: " + userInfo);
+	res.send("Successfully edit the member" + userInfo);
+	
+});
+//-----------Return a Movie-----------//
+app.post('/returnMovie', function(req,res){
+	var userInfo = req.param("member");
+	console.log("Edit member: " + userInfo);
+	res.send("Successfully edit the member" + userInfo);
+	
+});
 //-----------Search for All Movies------//
 app.post('/DisplayAllMovies', function(req,res){
 	//Checking the MYSQL connection is available

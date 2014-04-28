@@ -16,25 +16,63 @@
 			<th>City</th>
 			<th>State</th>
 			<th>Zip Code</th>
+			<th>Select a member</th>
 
 
 		</tr>
-		<% for(var i=0; i < members.length; i++){ %>
-		<tr>
+		<form class="navbar-form navbar-left" role="submit" method="POST">
+			<button type="submit" class="btn btn-default" value="Edit Member"
+				onclick="form.action='/editMember'">Edit Member</button>
+
+
+			<button type="submit" class="btn btn-default" value="Delete Member"
+			onclick="form.action='/deleteMember'">Delete
+				Member</button>
+
+			<button type="submit" class="btn btn-default" value="Issue Movie"
+			onclick="form.action='/issueMovie'">Issue
+				Movie</button>
+
+
+			<button type="submit" class="btn btn-default" value="Return Movie"
+			onclick="form.action='/returnMovie'">Return
+				Movie</button>
+
+			<div class="radio"><% for(var i=0; i < members.length; i++){ 
+				var memType = "Premium";
+				if (members[i].membertype==0){
+					memType = "Standard";
+				}
+				
+			%>
+			
+		<tr <% if (members[i].status =="inactive"){ %>
+			
+				class="danger"
+				<%
+				}else{%>
+					class="success"
+				<%}
+				 %> >
+		
 			<td><%= members[i].fname %></td>
 			<td><%= members[i].lname %></td>
 			<td><%= members[i].membershipno %></td>
-			<td><%= members[i].membertype %></td>
+			<td><%= memType %></td>
 			<td><%= members[i].address %></td>
 			<td><%= members[i].city %></td>
 			<td><%= members[i].state %></td>
 			<td><%= members[i].zipcode %></td>
-
-
+			<td><input type="radio" class="radio" name="member"
+				value="<%=
+				members[i].membershipno %>"> </input></td>
+				
 		</tr>
-
+			
 		<% } %>
+		</div>
 	</table>
 
+	</form>
 </body>
 </html>

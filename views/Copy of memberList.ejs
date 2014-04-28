@@ -1,0 +1,64 @@
+<% include bootstrap.ejs %>
+<html>
+<head>
+<title>Search Member</title>
+
+</head>
+<body>
+	<h2>Member List</h2>
+	<table class="table table-bordered table-hover">
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Membership No</th>
+			<th>Member Type</th>
+			<th>Address</th>
+			<th>City</th>
+			<th>State</th>
+			<th>Zip Code</th>
+			<th>Select a member</th>
+
+
+		</tr>
+		<div class="radio"><% for(var i=0; i < members.length; i++){ %>
+
+
+		
+		<tr>
+			<td><%= members[i].fname %></td>
+			<td><%= members[i].lname %></td>
+			<td><%= members[i].membershipno %></td>
+			<td><%= members[i].membertype %></td>
+			<td><%= members[i].address %></td>
+			<td><%= members[i].city %></td>
+			<td><%= members[i].state %></td>
+			<td><%= members[i].zipcode %></td>
+			<td><input type="radio" class="radio" name="member" value=\'<%=
+				members[i] %> \'> </input></td>
+		</tr>
+
+		<% } %>
+		</div>
+	</table>
+	<form class="navbar-form navbar-left" role="submit"
+		action="/editMember" method="POST">
+		<button type="submit" class="btn btn-default" value="Edit Member">Edit
+			Member</button>
+	</form>
+	<form class="navbar-form navbar-left" role="submit"
+		action="/deleteMember" method="POST">
+		<button type="submit" class="btn btn-default" value="Delete Member">Delete
+			Member</button>
+	</form>
+	<form class="navbar-form navbar-left" role="submit"
+		action="/issueMovie" method="POST">
+		<button type="submit" class="btn btn-default" value="Issue Movie">Issue
+			Movie</button>
+	</form>
+	<form class="navbar-form navbar-left" role="submit"
+		action="/returnMovie" method="POST">
+		<button type="submit" class="btn btn-default" value="Return Movie">Return
+			Movie</button>
+	</form>
+</body>
+</html>
