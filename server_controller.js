@@ -186,9 +186,51 @@ app.post('/addNewMember', function(req,res){
 			
 		});
 	}
-	return res.send('Successfully created');
+	return res.send('Successfully created a new member');
 	
 });
+
+
+app.post('/addNewMovie', function(req,res){
+	if (connection){
+		//Catching parameters and check if they are available or not
+		var movieName = req.param("movieName");
+		
+		var movieBanner = req.param("movieBanner");
+		
+		var releaseDate = req.param("rdate");
+		
+		var category = req.param("category");
+		
+		var availableCopies = req.param("quantity");
+		
+		var rentAmount = req.param("rentAmount");
+		
+		//create the query for each one
+		var query = 'INSERT INTO `videolibrarymanagement`.`movies` (`id`, `name`, `bannerName`, `releaseDate`, `category`, `rentAmount`, `availableCopies`) VALUES (NULL, '+ connection.escape(movieName) + ',' + connection.escape(movieBanner) + ',' + connection.escape(releaseDate)+ ',' + connection.escape(category)+ ',' + connection.escape(rentAmount)+ ',' + connection.escape(availableCopies) +' )' ;
+			
+		console.log("Add a new movie " + " " + movieName + " " + movieBanner + " " + releaseDate + " " + category + " " + rentAmount + " " + availableCopies);
+		console.log("Query : " + query);
+		connection.query(query, function(err, movies){
+			if (err){
+				console.log("Can't add new movie to DB");
+			}
+			else{
+				console.log(movies);
+			}
+			
+		});
+	}
+	return res.send('Successfully created a new movie');
+	
+});
+
+
+
+
+
+
+
 
 app.post('/searchMovie', function(req,res){
 
@@ -230,7 +272,7 @@ app.post('/deleteMember', function(req,res){
 		}
 		
 	});
-	res.send("Successfully edit the member" + memberNo);
+	res.send("Successfully deleted the member" + memberNo);
 	
 });
 //-----------Issue a Movie-----------//

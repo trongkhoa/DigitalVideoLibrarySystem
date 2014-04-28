@@ -9,6 +9,7 @@
 	<form class="navbar-form navbar-left" role="search"
 		action="/addNewMember" method="POST">
 		<div class="form-group">
+		Member Type:
 			<div class="radio">
 				<label> <input type="radio" name="member" id="1"
 					value="1" checked> Premium Member
@@ -19,10 +20,12 @@
 					value="0"> Simple Member
 				</label>
 			</div>
-			<br> First Name: <input type="text" name="firstName" id="fname"
+			<br><br> First Name: <input type="text" name="firstName" id="fname"
 				class="form-control" placeholder="First Name"></input><br> <br>
 			Last Name: <input type="text" name="lastName" id="lname"
 				class="form-control" placeholder="Last Name"></input><br> <br>
+			MembershipNo : <input type="text" name="memNum" id="memNum"
+				class="form-control" placeholder="Your Membership number"></input><br> <br>
 			Address: <input type="text" name="address" id="address"
 				class="form-control" placeholder="123 Somewhere St"></input><br>
 			<br> City: <input type="text" name="city" id="city"
@@ -80,9 +83,7 @@
 				<option value="WI">Wisconsin</option>
 				<option value="WY">Wyoming</option>
 			</select><br> <br> ZipCode: <input type="text" name="zipCode"
-				id="zipCode" class="form-control" placeholder="Zip Code"></input> <br>
-			<br> MembershipNo : <input type="text" name="memNum" id="memNum"
-				class="form-control" placeholder="Your Membership number"></input><br>
+				id="zipCode" class="form-control" placeholder="Zip Code"></input> <br><br>
 			<button type="submit" class="btn btn-default" value="Add New Member">Submit</button>
 		</div>
 
