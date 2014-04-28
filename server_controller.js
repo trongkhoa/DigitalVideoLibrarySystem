@@ -151,6 +151,44 @@ app.post('/searchCustomer', function(req,res){
 	
 });
 
+app.post('/addNewMember', function(req,res){
+	if (connection){
+		//Catching parameters and check if they are available or not
+		var memType = req.param("member");
+		
+		var firstName = req.param("firstName");
+		
+		var lastName = req.param("lastName");
+		
+		var membershipNo = req.param("memNum")
+		
+		var address = req.param("address");
+		
+		var city = req.param("city");
+		
+		var state = req.param("state");
+		
+		var zipCode = req.param("zipCode");
+		
+		//create the query for each one
+		var query = 'INSERT INTO `videolibrarymanagement`.`customers` (`id`, `membershipno`, `fname`, `lname`, `address`, `city`, `state`, `zipcode`, `membertype`, `amount`) VALUES (NULL, '+ connection.escape(membershipNo) + ',' + connection.escape(firstName) + ',' + connection.escape(lastName)+ ',' + connection.escape(address)+ ',' + connection.escape(city)+ ',' + connection.escape(state)+ ',' + connection.escape(zipCode) + ',' + connection.escape(memType) + ',\'\')' ;
+		
+		
+		console.log("Add a new member " + " " + memType + " " + firstName + " " + lastName + " " + membershipNo + " " + address + " " + city + " " + state + " " + zipCode);
+		console.log("Query : " + query);
+		connection.query(query, function(err, members){
+			if (err){
+				console.log("Can't add new member to DB");
+			}
+			else{
+				console.log(members);
+			}
+			
+		});
+	}
+	return res.send('Successfully created');
+	
+});
 
 app.post('/searchMovie', function(req,res){
 
