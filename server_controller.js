@@ -188,13 +188,17 @@ app.post('/DisplayAllMovies', function(req,res){
 		var rentAmount = req.param("rent");
 		
 		//create the query for each one
-		var query;
+		var query = "select * from movies";
+//		if (movieName || query || movieBanner || releaseDate || category ){
+//			
+//			query = query + " where ";
+//		}
 		if (movieName){
 			console.log("User want to see the Movie Name:" + movieName);
 			movieName = movieName + "%";
 			console.log(movieName);
 			//query to match the string input using LIKE in mySQL
-			query = "select * from movies where name like " + connection.escape(movieName);
+			query = query + " where name like " + connection.escape(movieName);
 			//if you get error, copy the line on the console log and check in your SQL terminal
 			console.log("SQL search for Movie Name:" + query);
 		} else if(movieBanner){
@@ -228,11 +232,11 @@ app.post('/DisplayAllMovies', function(req,res){
 			console.log("SQL search for rent Amount:" + query);
 		}
 		
-		//Display all movies
-		else{
-			
-			query = "select * from movies";
-		}
+//		//Display all movies
+//		else{
+//			
+//			query = "select * from movies";
+//		}
 		
 		//Query and render the output of the DB to JSON objects
 		connection.query(query, function(err, movies){
