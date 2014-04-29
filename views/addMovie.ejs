@@ -7,7 +7,8 @@
 	<h2>Add a new Movie</h2>
 	<form class="navbar-form navbar-left" role="search"
 		action="/addNewMovie" method="POST">
-	<div class="container">	
+		<div class="col-xs-2"> 
+	<!--div class="container"-->	
 			Movie Name: <input type="text" name="movieName" id="mname"
 				class="form-control" placeholder="Name" required ></input><br> <br>
 			Movie Banner: <input type="text" name="movieBanner" id="mbanner"
@@ -20,8 +21,10 @@
 				class="form-control" placeholder="Mystery,Drama" required ></input><br> <br>
 			Available Copies: <input type="text" name="quantity" id="quantity"
 				class="form-control" placeholder="Copies" required ></input><br> <br>
-			<br> <input type="submit" name="submit" value="Create new Movie" />
+			<br> <button type="submit" class="btn btn-primary" value="Add New Member">Submit</button>
+	<!--/div-->
 	</div>
+	
 	</form>
 </body>
 </html>
