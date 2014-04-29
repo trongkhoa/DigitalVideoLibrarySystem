@@ -453,7 +453,7 @@ app.post('/DisplayAllMembers', function(req, res) {
 
 		var state = req.param("state");
 
-		var zipcode = req.param("zipcode");
+		var zipcode = req.param("zipCode");
 
 		// create the query for each one
 		// Display all movies
