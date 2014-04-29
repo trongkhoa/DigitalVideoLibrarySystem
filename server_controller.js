@@ -203,16 +203,22 @@ app
 								+ membershipNo + " " + address + " " + city
 								+ " " + state + " " + zipCode);
 						console.log("Query : " + query);
-						connection.query(query, function(err, members) {
-							if (err) {
-								console.log("Can't add new member to DB");
-								return res.send('Failed to created a new member');
-							} else {
-								console.log(members);
-								return res.send('Successfully created a new member');
-							}
+						connection
+								.query(
+										query,
+										function(err, members) {
+											if (err) {
+												console
+														.log("Can't add new member to DB");
+												return res
+														.send('Failed to created a new member');
+											} else {
+												console.log(members);
+												return res
+														.send('Successfully created a new member');
+											}
 
-						});
+										});
 					}
 					return;
 
@@ -256,16 +262,22 @@ app
 								+ category + " " + rentAmount + " "
 								+ availableCopies);
 						console.log("Query : " + query);
-						connection.query(query, function(err, movies) {
-							if (err) {
-								console.log("Can't add new movie to DB");
-								return res.send('Failed to create a new movie');
-							} else {
-								console.log(movies);
-								return res.send('Successfully add a new movie');
-							}
+						connection
+								.query(
+										query,
+										function(err, movies) {
+											if (err) {
+												console
+														.log("Can't add new movie to DB");
+												return res
+														.send('Failed to create a new movie');
+											} else {
+												console.log(movies);
+												return res
+														.send('Successfully add a new movie');
+											}
 
-						});
+										});
 					}
 					return;
 
@@ -426,6 +438,33 @@ app.post('/DisplayAllMovies', function(req, res) {
 				});
 
 			} else {
+				console.log("Something wrong with DB MYSQL");
+
+			}
+		});
+
+	}
+
+});
+
+// -----------Search for All Members JSON------//
+app.get('/DisplayAllMembersJSON', function(req, res) {
+	// Checking the MYSQL connection is available
+	if (connection) {
+		
+		// Display all movies
+		var query = "select * from customers";
+
+		// Query and render the output of the DB to JSON objects
+		connection.query(query, function(err, members) {
+			//console.log(members);
+			if (!err) {
+				// <--- JSON passed to EJS
+				console.log("DisplayAllMembersJSON : " + members);
+				res.send(members);
+
+			} else {
+				
 				console.log("Something wrong with DB MYSQL");
 
 			}

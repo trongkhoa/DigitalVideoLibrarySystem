@@ -16,7 +16,10 @@
 			<th>Available Copies:</th>
 		</tr>
 		<% for(var i=0; i
-		<movies.length; i++){
+		< movies.length; i++){
+			if (!movies[i].name){
+			continue;
+			}
 		%>
 		<tr>
 			<td><%= movies[i].name %></td>
