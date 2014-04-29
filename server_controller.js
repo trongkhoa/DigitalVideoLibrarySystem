@@ -301,12 +301,118 @@ app.post('/searchMovie', function(req, res) {
 	});
 
 });
+// -----------Update a Member-----------//
+app
+		.post(
+				'/updateMember',
+				function(req, res) {
+					if (connection) {
+						// Catching parameters and check if they are available
+						// or not
+						var memType = req.param("member");
 
+						var firstName = req.param("firstName");
+
+						var lastName = req.param("lastName");
+
+						var membershipNo = req.param("memNum")
+
+						var address = req.param("address");
+
+						var city = req.param("city");
+
+						var state = req.param("state");
+
+						var zipCode = req.param("zipCode");
+
+						var status = req.param("status");
+						var oldMembershipNo = req.param("oldMembershipNo");
+
+						// create the query for each one
+						var query = 'UPDATE `videolibrarymanagement`.`customers` SET `membershipno` ='
+								+ connection.escape(membershipNo)
+								+ ',`fname` = '
+								+ connection.escape(firstName)
+								+ ',`lname` = '
+								+ connection.escape(lastName)
+								+ ',`address` = '
+								+ connection.escape(address)
+								+ ',	`city` ='
+								+ connection.escape(city)
+								+ ',`state` = '
+								+ connection.escape(state)
+								+ ',`zipcode` = '
+								+ connection.escape(zipCode)
+								+ ',`membertype` = '
+								+ connection.escape(memType)
+								+ ',`status` = '
+								+ connection.escape(status)
+								+ 'WHERE `customers`.`membershipno` ='
+								+ connection.escape(oldMembershipNo);
+
+						console.log("Add a new member " + " " + memType + " "
+								+ firstName + " " + lastName + " "
+								+ membershipNo + " " + address + " " + city
+								+ " " + state + " " + zipCode + " " + status);
+						console.log("Query : " + query);
+						connection
+								.query(
+										query,
+										function(err, members) {
+											if (err) {
+												console
+														.log("Can't edit the member in DB");
+												return res
+														.send('Failed to edit the member');
+											} else {
+												console.log(members);
+												return res
+														.send("Successfully edited" );
+											}
+
+										});
+					}
+
+				});
 // -----------Edit a Member-----------//
 app.post('/editMember', function(req, res) {
 	var userInfo = req.param("member");
 	console.log("Edit member: " + userInfo);
-	res.send("Successfully edit the member" + userInfo);
+	if (connection) {
+		// Catching parameters and check if they are available
+		// or not
+
+		// create the query for each one
+		var query = "Select * From customers Where membershipno ="
+				+ connection.escape(userInfo);
+
+		console.log("Edit a member " + "Query : " + query);
+		connection.query(query, function(err, members) {
+			if (err) {
+				console.log("Can't add new member to DB");
+				return res.send('Failed to created a new member');
+			} else {
+				console.log(members);
+				ejs.renderFile('./views/editMember.ejs', {
+					member : members[0]
+				}, function(err, result) {
+					// render on success
+					if (!err) {
+						res.end(result);
+					}
+					// render or error
+					else {
+						res.end('An error occurred');
+						console.log(err);
+					}
+				});
+
+			}
+
+		});
+	}
+
+	// res.send("Successfully edit the member" + userInfo);
 
 });
 // -----------Delete a Member-----------//
@@ -451,20 +557,20 @@ app.post('/DisplayAllMovies', function(req, res) {
 app.get('/DisplayAllMembersJSON', function(req, res) {
 	// Checking the MYSQL connection is available
 	if (connection) {
-		
+
 		// Display all movies
 		var query = "select * from customers";
 
 		// Query and render the output of the DB to JSON objects
 		connection.query(query, function(err, members) {
-			//console.log(members);
+			// console.log(members);
 			if (!err) {
 				// <--- JSON passed to EJS
 				console.log("DisplayAllMembersJSON : " + members);
 				res.send(members);
 
 			} else {
-				
+
 				console.log("Something wrong with DB MYSQL");
 
 			}

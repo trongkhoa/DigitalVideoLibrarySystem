@@ -7,7 +7,7 @@
 		if (zip) {
 			var isValid = /^[0-9]{5}(-[0-9]{4})?$/.test(zip);
 			if (!isValid) {
-				alert('Invalid ZipCode');
+				alert('Invalid ZipCode. Please use the format: 12345(-6789)');
 				return false;
 			}
 			return true;
@@ -17,7 +17,7 @@
 		if (numb) {
 			var isValid = /^[0-9]{3}(-[0-9]{2})(-[0-9]{4})$/.test(numb);
 			if (!isValid) {
-				alert('Invalid Membership');
+				alert('Invalid Membership. Please use the format: 123-45-6789');
 				return false;
 			}
 			return true;
@@ -32,6 +32,7 @@
 		var availableAddress = new Array();
 		var availableCity = new Array();
 		var availableZipCode = new Array();
+		var availableMemNumb = new Array();
 		$.get("DisplayAllMembersJSON",
 
 		function(data, status) {
@@ -43,7 +44,8 @@
 						availableLName.push(datum.lname);
 						availableAddress.push(datum.address);
 						availableCity.push(datum.city);
-						availableZipCode.push(datum.zipcode)
+						availableZipCode.push(datum.zipcode);
+						availableMemNumb.push(datum.membershipno);
 					}
 				})
 				$(function() {
@@ -62,6 +64,9 @@
 					});
 					$("#zipCode").autocomplete({
 						source : availableZipCode
+					});
+					$("#memNum").autocomplete({
+						source : availableMemNumb
 					});
 				});
 
@@ -101,7 +106,7 @@
 			<br> Last Name: <input type="text" name="lastName" id="lname"
 				class="form-control" placeholder="Last Name"></input><br> <br>
 			MembershipNo : <input type="text" name="memNum" id="memNum"
-				class="form-control" placeholder="Your Membership number"></input><br>
+				class="form-control" placeholder="123-45-6789"></input><br>
 			<br> Address: <input type="text" name="address" id="address"
 				class="form-control" placeholder="123 Somewhere St"></input><br>
 			<br> City: <input type="text" name="city" id="city"
