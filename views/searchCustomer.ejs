@@ -2,29 +2,6 @@
 <html>
 <head>
 <title>Add Customer</title>
-<script type="text/javascript">
-	function IsValidZipCode(zip) {
-		if (zip) {
-			var isValid = /^[0-9]{5}(-[0-9]{4})?$/.test(zip);
-			if (!isValid) {
-				alert('Invalid ZipCode. Please use the format: 12345(-6789)');
-				return false;
-			}
-			return true;
-		}
-	}
-	function IsValidMemberNo(numb) {
-		if (numb) {
-			var isValid = /^[0-9]{3}(-[0-9]{2})(-[0-9]{4})$/.test(numb);
-			if (!isValid) {
-				alert('Invalid Membership. Please use the format: 123-45-6789');
-				return false;
-			}
-			return true;
-		}
-	}
-	//IsValidZipCode(this.form.zipCode.value);
-</script>
 <script>
 	$(document).ready(function() {
 		var availableFName = new Array();
