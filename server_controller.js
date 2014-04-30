@@ -440,7 +440,8 @@ app
 app.post('/issueMovie', function(req, res) {
 	var userInfo = req.param("member");
 	console.log("Edit member: " + userInfo);
-	res.send("Successfully edit the member" + userInfo);
+	//res.send("Successfully edit the member" + userInfo);
+	res.render('issuedMovies.ejs');
 
 });
 // -----------Return a Movie-----------//
@@ -450,6 +451,95 @@ app.post('/returnMovie', function(req, res) {
 	res.send("Successfully edit the member" + userInfo);
 
 });
+//-----------Search for All Movies in JSON------//
+app.post('/DisplayAllMoviesJSON', function(req, res) {
+	// Checking the MYSQL connection is available
+	if (connection) {
+		// Catching parameters and check if they are available or not
+		var movieName = req.param("movieName");
+
+		var movieBanner = req.param("movieBanner");
+
+		var releaseDate = req.param("rdate");
+
+		var category = req.param("category");
+
+
+
+		// create the query for each one
+		var query = "select * from movies";
+		// if (movieName || query || movieBanner || releaseDate || category ){
+		//			
+		// query = query + " where ";
+		// }
+		if (movieName) {
+			console.log("User want to see the Movie Name:" + movieName);
+			movieName = movieName + "%";
+			console.log(movieName);
+			// query to match the string input using LIKE in mySQL
+			query = query + " where name like " + connection.escape(movieName);
+			// if you get error, copy the line on the console log and check in
+			// your SQL terminal
+			console.log("SQL search for Movie Name:" + query);
+		} else if (movieBanner) {
+			movieBanner = movieBanner + "%";
+			console.log(movieBanner);
+			query = "select * from movies where bannerName like "
+					+ connection.escape(movieBanner);
+			console.log("SQL search for Movie Banner:" + query);
+
+		} else if (releaseDate) {
+			releaseDate = releaseDate + "%";
+			console.log(releaseDate);
+			query = "select * from movies where releaseDate like "
+					+ connection.escape(releaseDate);
+			console.log("SQL search for release Date:" + query);
+
+		} else if (category) {
+			category = category + "%";
+			console.log(category);
+			query = "select * from movies where category like "
+					+ connection.escape(category);
+			console.log("SQL search for category:" + query);
+
+		} else if (availableCopies) {
+			availableCopies = availableCopies + "%";
+			console.log(availableCopies);
+			query = "select * from movies where availableCopies like "
+					+ connection.escape(availableCopies);
+			console.log("SQL search for available copies:" + query);
+
+		} else if (rentAmount) {
+			rentAmount = rentAmount + "%";
+			console.log(rentAmount);
+			query = "select * from movies where rentAmount like "
+					+ connection.escape(rentAmount);
+			console.log("SQL search for rent Amount:" + query);
+		}
+
+		// //Display all movies
+		// else{
+		//			
+		// query = "select * from movies";
+		// }
+
+		// Query and render the output of the DB to JSON objects
+		connection.query(query, function(err, movies) {
+			console.log(movies);
+			if (!err) {
+				res.send(movies);
+
+			} else {
+				console.log("Something wrong with DB MYSQL");
+
+			}
+		});
+
+	}
+
+});
+
+
 // -----------Search for All Movies------//
 app.post('/DisplayAllMovies', function(req, res) {
 	// Checking the MYSQL connection is available

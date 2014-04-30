@@ -1,0 +1,67 @@
+<% include bootstrap.ejs %>
+<html>
+<head>
+<title>Search Movie</title>
+
+</head>
+<body>
+	<h1>Movie List</h1>
+	<h3>
+		Search for a Movie <span class="glyphicon glyphicon-search"></span>
+	</h3>
+	
+	<div class="container">
+		<form id="getMovies" name="getMovies" action="/DisplayAllMoviesJSON"
+			method="POST">
+
+			<span class="glyphicon glyphicon-film"></span> Movie Name: <input
+				type="text" name="movieName" id="mname"></input><br> <br>
+			<span class="glyphicon glyphicon-book"></span>Movie Banner: <input
+				type="text" name="movieBanner" id="mbanner"></input><br> <br>
+			<span class="glyphicon glyphicon-calendar"> Release Date: <input
+				type="text" name="rdate" id="rdate"></input><br> <br> <span
+				class="glyphicon glyphicon-folder-open"> Category: <input
+					type="text" name="category" id="category"></input><br> <br>
+					<input type="submit" name="submit" value="Search Movie" />
+		</form>
+	</div>
+	<table class="table table-bordered table-hover" id="movieTable" name="movieTable">
+		<tr>
+			<th>Movie Name</th>
+			<th>Banner Name</th>
+			<th>Release Year</th>
+			<th>Category</th>
+			<th>Rent</th>
+			<th>Available Copies:</th>
+		</tr>
+
+	</table>
+<script type="text/javascript">
+var frm = $('#getMovies');
+frm.submit(function (ev) {
+    $.ajax({
+        type: frm.attr('method'),
+        url: frm.attr('action'),
+        data: frm.serialize(),
+        success: function (data) {
+        	$(function() {
+        	    $.each(data, function(i, item) {
+        	        var $tr = $('<tr>').append(
+        	            $('<td>').text(item.name),
+        	            $('<td>').text(item.bannerName),
+        	            $('<td>').text(item.releaseDate),
+        	            $('<td>').text(item.category),
+        	            $('<td>').text(item.rentAmount),
+        	            $('<td>').text(item.availableCopies)
+        	        ).appendTo('#movieTable');
+        	        //console.log($tr.wrap('<p>').html());
+        	    });
+        	});
+        }
+    });
+
+    ev.preventDefault();
+});
+</script>
+</body>
+</html>
