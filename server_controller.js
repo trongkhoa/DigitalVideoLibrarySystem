@@ -541,20 +541,20 @@ app
 		.post(
 				'/deleteMovie',
 				function(req, res) {
-					var movieInfo = req.param("moviename");
+					var movieInfo = req.param("movieId");
 					console.log("Edit movie: " + movieInfo);
-					var query = 'UPDATE  `videolibrarymanagement`.`movies` SET  `status` =  \'unavailable\' WHERE  `movies`.`name` = '
+					var query = 'UPDATE  `videolibrarymanagement`.`movies` SET  `status` =  \'unavailable\' WHERE  `movies`.`id` = '
 							+ connection.escape(movieInfo);
 					connection.query(query, function(err, result) {
 						if (!err) {
-							console.log("users is inactive now: " + result);
+							console.log("movie is unavailable now: " + result);
 						} else {
 							console.log("error can't edit user's status: "
 									+ err);
 						}
 
 					});
-					res.send("Successfully deleted the member" + movieInfo);
+					res.send("Successfully deleted the movie id" + movieInfo);
 
 				});
 

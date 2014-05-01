@@ -15,45 +15,63 @@
 			<th>Rent</th>
 			<th>Available Copies</th>
 			<th>Select a movie</th>
-			
+
 		</tr>
-		<form class="navbar-form navbar-left" role="submit" method="POST">
+		<form class="navbar-form navbar-left" role="submit" method="POST"
+			id="movieList" name="movieList">
 			<button type="submit" class="btn btn-default" value="Edit Movie"
 				onclick="form.action='/editMovie'">Edit Movie</button>
 
 
 			<button type="submit" class="btn btn-default" value="Delete Movie"
-			onclick="form.action='/deleteMovie'">Delete
-				Movie</button>
-	
-		<div class="radio"><% for(var i=0; i< movies.length; i++){
-			if (!movies[i].name){
-			continue;
-			}
-		%>
-		<tr <% if (movies[i].status =="unavailable"){ %>
-			
-				class="danger"
-				<%
-				}else{%>
-					class="success"
-				<%}
-				 %> >
-				 
-			<td><%= movies[i].name %></td>
+				id="deleteMovie" name="deleteMovie">Delete Movie</button>
+
+			<div class="radio">
+				<% for(var i=0; i< movies.length; i++){ if (!movies[i].name){
+				continue; } %>
+				<tr
+					<% if (movies[i].status =="unavailable"){ %> class="danger" <%
+					}else{%> class="success" <%} %> >
+
+					<td><%= movies[i].name %></td>
 			<td><%= movies[i].bannerName %></td>
 			<td><%= movies[i].releaseDate %></td>
 			<td><%= movies[i].category %></td>
 			<td><%= movies[i].rentAmount %></td>
 			<td><%= movies[i].availableCopies %></td>
-			<td><input type="radio" class="radio" name="movieId"
+			<td><input type="radio" class="radio" name="movieId" id="movieId"
 				value="<%=
-				movies[i].id %>"> </input></td>
+				movies[i].id %>" checked="<% if(i==0){%>checked<%}else{%><% } %>"> </input></td>
 		</tr>
 
-		<% } %> 
+		<% } %>
 		</div>
+
+		</form>
 	</table>
-	</form>
+
 </body>
+<script>
+	var frm = $("#movieList");
+	
+		$("#deleteMovie").click(function() {
+			if ($('#movieId')) {
+			$.ajax({
+				type : frm.attr('method'),
+				url : "./deleteMovie",
+				data : frm.serialize(),
+				success : function(data) {
+					$(function() {
+						alert("Movies removed" + data);
+					});
+				}
+			});
+			}else{ alert("Please select a movie to delete");}
+			ev.preventDefault();
+		});
+
+	
+		
+</script>
+
 </html>
