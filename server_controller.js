@@ -432,6 +432,132 @@ app.post('/returnMovie', function(req, res) {
 	res.send("Successfully edit the member" + userInfo);
 
 });
+
+
+//-----------Edit a Movie-----------//
+app.post('/editMovie', function(req, res) {
+	var movieInfo = req.param("movie");
+	console.log("Edit movie: " + movieInfo);
+	if (connection) {
+		// Catching parameters and check if they are available
+		// or not
+
+		// create the query for each one
+		var query = "Select * From movies Where name ="
+			+ connection.escape(movieInfo);
+
+		console.log("Edit a movie " + "Query : " + query);
+		connection.query(query, function(err, movies) {
+			if (err) {
+				console.log("Can't add new movie to DB");
+				return res.send('Failed to created a new movie');
+			} else {
+				console.log(movies);
+				ejs.renderFile('./views/editMovie.ejs', {
+					movie : movies[0]
+				}, function(err, result) {
+					// render on success
+					if (!err) {
+						res.end(result);
+					}
+					// render or error
+					else {
+						res.end('An error occurred');
+						console.log(err);
+					}
+				});
+
+			}
+
+		});
+	}
+
+	// res.send("Successfully edit the member" + userInfo);
+
+});
+
+//-----------Update a Movie-----------//
+app.post('/updateMovie',function(req, res) {
+	if (connection) {
+		// Catching parameters and check if they are available
+		// or not
+		var moviename = req.param("movieName");
+
+		var bannername = req.param("bannerName");
+		
+		var releaseDate = req.param("reldate")
+
+		var category = req.param("category");
+		
+		var rent = req.param("rent");
+		
+		var copies = req.param("copies");
+		
+		var status = req.param("status");
+
+		// create the query for each one
+		var query = 'UPDATE `videolibrarymanagement`.`movies` SET `name` ='
+			+ connection.escape(moviename)
+			+ ',`bannerName` = '
+			+ connection.escape(bannername)
+			+ ',`releaseDate` = '
+			+ connection.escape(releaseDate)
+			+ ',`category` = '
+			+ connection.escape(category)
+			+ ',	`rentAmount` ='
+			+ connection.escape(rent)
+			+ ',`availableCopies` = '
+			+ connection.escape(copies)
+			+ ',`status` = '
+			+ connection.escape(status)
+			
+		console.log("Edit movie " + " " + moviename + " "
+				+ bannername + " " + releaseDate + " "
+				+ category + " " + rent + " " + copies
+				+ " " + status);
+		console.log("Query : " + query);
+		connection.query(query,function(err, movies) {
+			if (err) {
+				console
+				.log("Can't edit the movie in DB");
+				return res
+				.send('Failed to edit the movie');
+			} else {
+				console.log(movies);
+				return res
+				.send("Successfully edited" );
+			}
+
+		});
+	}
+
+});
+
+
+
+
+
+//-----------Delete a Movie-----------//
+app.post('/deleteMovie',function(req, res) {
+			var movieInfo = req.param("moviename");
+			console.log("Edit movie: " + movieInfo);
+			var query = 'UPDATE  `videolibrarymanagement`.`movies` SET  `status` =  \'unavailable\' WHERE  `movies`.`name` = '
+				+ connection.escape(movieInfo);
+			connection.query(query, function(err, result) {
+				if (!err) {
+					console.log("users is inactive now: " + result);
+				} else {
+					console.log("error can't edit user's status: "
+							+ err);
+				}
+
+			});
+			res.send("Successfully deleted the member" + movieInfo);
+
+		});
+
+
+
 //-----------Search for All Movies in JSON------//
 app.post('/DisplayAllMoviesJSON', function(req, res) {
 	// Checking the MYSQL connection is available

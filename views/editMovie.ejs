@@ -1,0 +1,42 @@
+<% include bootstrap.ejs %>
+<html>
+<head>
+<title>Edit Customer</title>
+</head>
+<body>
+	<h2>Edit Movie</h2>
+	<form class="navbar-form navbar-left" role="search"
+		action="/updateMovie" method="POST">
+		<div class="col-xs-2">
+			<div class="form-group">
+				<br> Movie Name: <input type="text" name="movieName" id="mname"
+					class="form-control" placeholder="Movie Name"
+					value="<%=movie.name%>" required></input><br> <br>
+				Banner Name: <input type="text" name="bannerName" id="bname"
+					class="form-control" placeholder="Banner Name"
+					value="<%=movie.bannerName%>" required></input><br> <br>
+				Release Date: <input type="text" name="reldate" id="rdate"
+					class="form-control" placeholder="YYYY"
+					value="<%=movie.releaseDate%>" required></input><br> <br>
+				Category: <input type="text" name="category" id="category"
+					class="form-control" placeholder="Mystery, Drama"
+					value="<%=movie.category%>" required></input><br> <br>
+				Rent Amount: <input type="text" name="rent" id="rentAmount"
+					class="form-control" placeholder="$$.$$" 
+					value="<%=movie.rentAmount%>" required ></input><br> <br>
+				Available Copies: <input type="text" name="copies" id="quantity"
+					class="form-control" placeholder="Copies" 
+					value="<%=movie.availableCopies%>" required ></input><br> <br>				
+				Status: <select class="form-control" name="status"
+					id="status">
+					<option value="available">available</option>
+					<option value="unavailable">unavailable</option>
+				</select><br><br>
+				<button type="submit" class="btn btn-primary" value="Edit Movie">Submit</button>
+			</div>
+		</div>
+
+
+	</form>
+</body>
+</html>
