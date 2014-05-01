@@ -58,7 +58,7 @@
 			if ($('#movieId')) {
 			$.ajax({
 				type : frm.attr('method'),
-				url : "./deleteMovie",
+				url : "/deleteMovie",
 				data : frm.serialize(),
 				success : function(data) {
 					$(function() {
