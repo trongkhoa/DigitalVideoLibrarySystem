@@ -47,7 +47,7 @@ frm.submit(function (ev) {
         	$(function() {
         		$("#movieTable").find("tr:gt(0)").remove();
         	    $.each(data, function(i, item) {
-        	    	
+        	    	if(item.name){
         	        var $tr = $('<tr>').append(
         	            $('<td>').text(item.name),
         	            $('<td>').text(item.bannerName),
@@ -56,7 +56,7 @@ frm.submit(function (ev) {
         	            $('<td>').text(item.rentAmount),
         	            $('<td>').text(item.availableCopies)
         	        ).appendTo('#movieTable');
-        	        //console.log($tr.wrap('<p>').html());
+        	    }
         	    });
         	});
         }
