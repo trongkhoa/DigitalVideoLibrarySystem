@@ -45,7 +45,9 @@ frm.submit(function (ev) {
         data: frm.serialize(),
         success: function (data) {
         	$(function() {
+        		$("#movieTable").find("tr:gt(0)").remove();
         	    $.each(data, function(i, item) {
+        	    	
         	        var $tr = $('<tr>').append(
         	            $('<td>').text(item.name),
         	            $('<td>').text(item.bannerName),
