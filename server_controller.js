@@ -516,7 +516,7 @@ app.post('/updateMovie', function(req, res) {
 				+ connection.escape(category) + ',	`rentAmount` ='
 				+ connection.escape(rent) + ',`availableCopies` = '
 				+ connection.escape(copies) + ',`status` = '
-				+ connection.escape(status) + 'WHERE `movies`.`id` ='
+				+ connection.escape(status) + ' WHERE `movies`.`id` ='
 				+ connection.escape(id);
 		console.log("Edit movie " + " " + moviename + " " + bannername + " "
 				+ releaseDate + " " + category + " " + rent + " " + copies
