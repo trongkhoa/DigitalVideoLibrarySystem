@@ -71,8 +71,22 @@ frm.submit(function (ev) {
         	        ).appendTo('#movieTable');
         	        
         	        $("#movieTable").on('click', '#'+item.id,function(){
+            	    	var obj = new Object();
+            	    	obj.membershipno=$('#memshipno').attr('value');
+            	    	obj.itemid = item.id;
             	    	
-            	    	alert("User " + $('#memshipno').attr('value') + " click: add To cart on ItemId: " + + item.id);
+            	    	console.log(JSON.stringify(obj));
+            	    	console.log("User " + obj.membershipno + " click: add To cart on ItemId: " + obj.itemid);
+            	    	$.ajax({
+            	    		type: "POST",
+            	    		url: "addMovieToCart",
+            	    		data: {membershipno: obj.membershipno, itemid: obj.itemid},
+            	    		success: function(data){
+            	    			console.log(data);
+            	    		}
+            	    		
+            	    		
+            	    	});
             	    });
         	    	}
         	    });

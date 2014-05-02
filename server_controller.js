@@ -430,45 +430,66 @@ app
 					res.send("Successfully deleted the member" + memberNo);
 
 				});
+
+// -----------Add Movie To Cart-----------//
+app.post('/addMovieToCart', function(req, res) {
+	var membershipno = req.param("membershipno");
+	var itemid = req.param("itemid");
+	console.log("membershipno: " + membershipno);
+	console.log("itemid: " + itemid);
+	// res.send("Successfully edit the member" + userInfo);
+//	var query = 'INSERT INTO status From customers Where membershipno='
+//			+ connection.escape(userInfo);
+//
+//	connection.query(query, function(err, result) {
+//		if (err) {
+//			res.send("Error can't insert into cart" + err);
+//		} else {
+//			// res.render('issuedMovies.ejs');
+//			
+//			res.send("Add movie to cart successfully");
+//		}
+//
+//	});
+	res.send("Add movie to cart successfully");
+});
 // -----------Issue a Movie-----------//
 app.post('/issueMovie', function(req, res) {
 	var userInfo = req.param("member");
 	console.log("Edit member: " + userInfo);
 	// res.send("Successfully edit the member" + userInfo);
-	var query = 'Select status From customers Where membershipno=' + connection.escape(userInfo);
-		
-	connection.query(query, function(err, result) {
-	if (!err) {
-		var userStatus = result[0].status;
-		var membershipno= result[0].membershipno;
-		console.log("users status " + userStatus + membershipno);
-		if (userStatus ==="inactive"){
-			res.send("Can't issue movies to inactive users");
-		}
-		else{
-			//res.render('issuedMovies.ejs');
-			ejs.renderFile('./views/issuedMovies.ejs', {
-				"member" : userInfo
-			}, function(err, result) {
-				// render on success
-				if (!err) {
-					res.end(result);
-				}
-				// render or error
-				else {
-					res.end('An error occurred');
-					console.log(err);
-				}
-			});
-		}
-		
-	} else {
-		console.log("error can't edit user's status: "
-				+ err);
-	}
+	var query = 'Select status From customers Where membershipno='
+			+ connection.escape(userInfo);
 
-});
-	
+	connection.query(query, function(err, result) {
+		if (!err) {
+			var userStatus = result[0].status;
+			var membershipno = result[0].membershipno;
+			console.log("users status " + userStatus + membershipno);
+			if (userStatus === "inactive") {
+				res.send("Can't issue movies to inactive users");
+			} else {
+				// res.render('issuedMovies.ejs');
+				ejs.renderFile('./views/issuedMovies.ejs', {
+					"member" : userInfo
+				}, function(err, result) {
+					// render on success
+					if (!err) {
+						res.end(result);
+					}
+					// render or error
+					else {
+						res.end('An error occurred');
+						console.log(err);
+					}
+				});
+			}
+
+		} else {
+			console.log("error can't edit user's status: " + err);
+		}
+
+	});
 
 });
 // -----------Return a Movie-----------//
