@@ -25,6 +25,7 @@
 					<input type="submit" name="submit" value="Search Movie" />
 		</form>
 	</div>
+	<input type="hidden" value="Passing Memship No here" id="memshipno">;
 	<table class="table table-bordered table-hover" id="movieTable" name="movieTable">
 		<tr>
 			<th>Movie Name</th>
@@ -38,8 +39,7 @@
 	</table>
 <script type="text/javascript">
 var frm = $('#getMovies');
-$form = $("<form></form>");
-$form.append('<input type="button" value="Add To Cart" />');
+
 
 frm.submit(function (ev) {
     $.ajax({
@@ -51,27 +51,32 @@ frm.submit(function (ev) {
         		$("#movieTable").find("tr:gt(0)").remove();
         	    $.each(data, function(i, item) {
         	    	if(item.name){
-        	    		
+        	    		var button =  $('<input></input>').attr({'type': 'button', 'id': item.id}).val("Add To Cart");
         	        var $tr = $('<tr>').append(
-        	        		
         	            $('<td>').text(item.name),
         	            $('<td>').text(item.bannerName),
         	            $('<td>').text(item.releaseDate),
         	            $('<td>').text(item.category),
         	            $('<td>').text(item.rentAmount),
-        	            $('<td>').text(item.availableCopies),
-        	            $('<td>').append($form)
-        	            
-        	            
+        	            $('<td>').text(item.availableCopies)
+        	            ,$('<td>').append(button)
         	        ).appendTo('#movieTable');
-        	    }
+        	        
+        	        $("#movieTable").on('click', '#'+item.id,function(){
+            	    	
+            	    	alert("User click: Let's do ajax call to Item: " + $('#memshipno').attr('value')+ item.id);
+            	    });
+        	    	}
         	    });
+        	 
         	});
+        	
         }
     });
-
     ev.preventDefault();
 });
+
+
 </script>
 </body>
 </html>
