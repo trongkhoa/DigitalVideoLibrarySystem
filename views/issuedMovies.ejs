@@ -25,7 +25,7 @@
 					<input type="submit" name="submit" value="Search Movie" />
 		</form>
 	</div>
-	<input type="hidden" value="Passing Memship No here" id="memshipno">;
+	<input type="hidden" value="<%= member%>" id="memshipno">;
 	<table class="table table-bordered table-hover" id="movieTable" name="movieTable">
 		<tr>
 			<th>Movie Name</th>
@@ -64,7 +64,7 @@ frm.submit(function (ev) {
         	        
         	        $("#movieTable").on('click', '#'+item.id,function(){
             	    	
-            	    	alert("User click: Let's do ajax call to Item: " + $('#memshipno').attr('value')+ item.id);
+            	    	alert("User " + $('#memshipno').attr('value') + " click: add To cart on ItemId: " + + item.id);
             	    });
         	    	}
         	    });

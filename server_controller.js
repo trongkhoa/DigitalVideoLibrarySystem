@@ -435,7 +435,40 @@ app.post('/issueMovie', function(req, res) {
 	var userInfo = req.param("member");
 	console.log("Edit member: " + userInfo);
 	// res.send("Successfully edit the member" + userInfo);
-	res.render('issuedMovies.ejs');
+	var query = 'Select status From customers Where membershipno=' + connection.escape(userInfo);
+		
+	connection.query(query, function(err, result) {
+	if (!err) {
+		var userStatus = result[0].status;
+		var membershipno= result[0].membershipno;
+		console.log("users status " + userStatus + membershipno);
+		if (userStatus ==="inactive"){
+			res.send("Can't issue movies to inactive users");
+		}
+		else{
+			//res.render('issuedMovies.ejs');
+			ejs.renderFile('./views/issuedMovies.ejs', {
+				"member" : userInfo
+			}, function(err, result) {
+				// render on success
+				if (!err) {
+					res.end(result);
+				}
+				// render or error
+				else {
+					res.end('An error occurred');
+					console.log(err);
+				}
+			});
+		}
+		
+	} else {
+		console.log("error can't edit user's status: "
+				+ err);
+	}
+
+});
+	
 
 });
 // -----------Return a Movie-----------//
