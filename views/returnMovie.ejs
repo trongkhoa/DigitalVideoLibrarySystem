@@ -1,0 +1,33 @@
+<% include bootstrap.ejs %>
+<html>
+<head>
+<title>Search Member</title>
+
+</head>
+<body>
+	<h2>Return Movie List</h2>
+	<table class="table table-bordered table-hover">
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Movie Name</th>
+			<th>Select to return</th>
+
+	</tr>
+	<tr>	
+	
+	<% for(var i = 0; i< movies.length; i++){ %>
+			<td><%= movies[i].fname %></td>
+			<td><%= movies[i].lname %></td>
+			<td><%= movies[i].name %></td>
+			<td><button type="submit" class="btn btn-default" value="Return Movie">Return</button></td>
+				
+		</tr>
+			<% } %>
+			
+		</div>
+	</table>
+
+	</form>
+</body>
+</html>

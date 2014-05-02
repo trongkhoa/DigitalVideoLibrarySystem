@@ -11,20 +11,28 @@
 	</h3>
 	
 	<div class="container">
-		<form id="getMovies" name="getMovies" action="/DisplayAllMoviesJSON"
+	<form class="form-inline" role="form" id="getMovies" name="getMovies" action="/DisplayAllMoviesJSON"
 			method="POST">
+  <div class="form-group">
+    <label class="sr-only" for="movieName">Movie Name</label>
+    <input type="text" name="movieName" class="form-control" id="mname" placeholder="Movie Name">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="movieBanner">Banner Name</label>
+    <input type="text" name="movieBanner" class="form-control" id="bname" placeholder="Banner Name">
+  </div>
+   <div class="form-group">
+    <label class="sr-only" for="rdate">Release Date</label>
+    <input type="text" name="rdate" class="form-control" id="rdate" placeholder="Release Date">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="category">Category</label>
+    <input type="text" name="category" class="form-control" id="category" placeholder="Category">
+  </div>
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
 
-			<span class="glyphicon glyphicon-film"></span> Movie Name: <input
-				type="text" name="movieName" id="mname"></input><br> <br>
-			<span class="glyphicon glyphicon-book"></span>Movie Banner: <input
-				type="text" name="movieBanner" id="mbanner"></input><br> <br>
-			<span class="glyphicon glyphicon-calendar"> Release Date: <input
-				type="text" name="rdate" id="rdate"></input><br> <br> <span
-				class="glyphicon glyphicon-folder-open"> Category: <input
-					type="text" name="category" id="category"></input><br> <br>
-					<input type="submit" name="submit" value="Search Movie" />
-		</form>
-	</div>
+</div>
 	<input type="hidden" value="<%= member%>" id="memshipno">;
 	<table class="table table-bordered table-hover" id="movieTable" name="movieTable">
 		<tr>

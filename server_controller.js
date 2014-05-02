@@ -473,12 +473,36 @@ app.post('/issueMovie', function(req, res) {
 });
 // -----------Return a Movie-----------//
 app.post('/returnMovie', function(req, res) {
-	var userInfo = req.param("member");
-	console.log("Edit member: " + userInfo);
-	res.send("Successfully edit the member" + userInfo);
+	var memberInfo = req.param("member");
+	if(connection){
+	var query = "SELECT s.fname , s.lname , m.name FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = " + connection.escape(memberInfo);
+	
+	console.log("Edit a movie " + "Query : " + query);
+	connection.query(query, function(err, movies) {
+		if (err) {
+			console.log("Can't add new movie to DB");
+			return res.send('Failed to created a new movie');
+		} else {
+			console.log(movies);
+			ejs.renderFile('./views/returnMovie.ejs', {
+		"movies" : movies
+	}, function(err, result) {
+		// render on success
+		if (!err) {
+			res.end(result);
+		}
+		// render or error
+		else {
+			res.end('An error occurred');
+			console.log(err);
+		}
+	});
+	console.log("Edit member: " + memberInfo);
 
+}
+	});
+	}
 });
-
 // -----------Edit a Movie-----------//
 app.post('/editMovie', function(req, res) {
 	var movieInfo = req.param("movieId");
