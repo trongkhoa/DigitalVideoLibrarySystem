@@ -437,27 +437,52 @@ app.post('/addMovieToCart', function(req, res) {
 	var itemid = req.param("itemid");
 	console.log("membershipno: " + membershipno);
 	console.log("itemid: " + itemid);
-	
-	var query ="INSERT INTO `videolibrarymanagement`.`cart` (`transactionId`, `membershipNo`, `movieId`, `issuedDate`, `status`) " +
-			"VALUES (NULL, " +
-			connection.escape(membershipno) +
-			", " +
-			connection.escape(itemid) +
-			", " +
-			"NOW()" +
-			", " +
-			"'pending')"; 
-	console.log(query);		
-
+	itemid = connection.escape(itemid);
+	membershipno = connection.escape(membershipno);
+	var query = "Select availableCopies FROM movies Where id= " + itemid;
 	connection.query(query, function(err, result) {
 		if (err) {
 			res.send("Error can't insert into cart" + err);
 		} else {
+			var quantity =result[0].availableCopies;
+			console.log("Current quantity: " + quantity);
+			if (quantity > 1){
+				var qSubMovies = "UPDATE `movies` SET `availableCopies` = `availableCopies` - 1 WHERE `id` = " + itemid;
+				connection.query(qSubMovies, function(err1, result1) {
+					if (err1) {
+						console.log("Error can't subtract 1 from movies" + err1);
+					} else {
+						console.log("Succesfully substract 1 from movies" + result1);
+						
+						var qCart ="INSERT INTO `videolibrarymanagement`.`cart` (`transactionId`, `membershipNo`, `movieId`, `issuedDate`, `status`) " +
+								"VALUES (NULL, " +
+								connection.escape(membershipno) +
+								", " +
+								connection.escape(itemid) +
+								", " +
+								"NOW()" +
+								", " +
+								"'pending')"; 
+						console.log(qCart);		
+					
+						connection.query(qCart, function(err2, result2) {
+							if (err2) {
+								res.send("Error can't insert into cart" + err2);
+							} else {
+								
+								res.send("Add movie to cart successfully");
+							}
+					
+						});
+					}
+				});
+				res.send("Add movie to cart successfully");
 			
-			res.send("Add movie to cart successfully");
+			}
 		}
 
 	});
+
 });
 // -----------Issue a Movie-----------//
 app.post('/issueMovie', function(req, res) {
