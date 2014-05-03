@@ -12,9 +12,65 @@ $(function() {
     		
 });
 </script>
+<style type="text/css">
+
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 20px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #F5F5F5;
+    border-right: 1px solid #EEE;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+ #signout {
+ 	margin-top: 20px;
+ }
+</style>
 
 </head>
 <body>
+
+<div class="container-fluid">
+		
+	
+		<div class="row">
+			<div class="col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li><a href="/searchCustomer">Search Customer</a></li>
+					<li><a href="/addCustomer">Add Customer</a></li>
+					<li><a href="/searchMovie">Search Movie</a></li>
+					<li><a href="/addMovie">Add Movie</a></li>
+					
+					
+				</div>
+			</div>
+			<div class="col-md-10 col-md-offset-2">
+				<div class="pull-right" id="signout">
+					<form action="/loginPage">
+						<input class="btn btn-primary" type="submit" name="submit"
+						value="Sign Out" />
+					</form>
+				</div>
+				
+				
+
 	<h2>Edit Customer</h2>
 	<form class="navbar-form navbar-left" role="search"
 		action="/updateMember" method="POST">
@@ -114,5 +170,9 @@ $(function() {
 
 
 	</form>
+				
+			</div>
+	
+	</div>
 </body>
 </html>

@@ -2,10 +2,86 @@
 <html>
 <head>
 <title>Search Movie</title>
+<script>
+<!--
+	var frm = $("#movieList");
+	
+		$("#deleteMovie").click(function() {
+			if ($('#movieId')) {
+			$.ajax({
+				type : frm.attr('method'),
+				url : "/deleteMovie",
+				data : frm.serialize(),
+				success : function(data) {
+					$(function() {
+						alert("Movies removed" + data);
+					});
+				}
+			});
+			}else{ alert("Please select a movie to delete");}
+			ev.preventDefault();
+		});
 
+	
+		-->		
+</script>
+<style type="text/css">
+
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 20px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #F5F5F5;
+    border-right: 1px solid #EEE;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+ #signout {
+ 	margin-top: 20px;
+ }
+</style>
 </head>
 <body>
-	<h2>Movie List</h2>
+	
+	<div class="container-fluid">
+		
+	
+		<div class="row">
+			<div class="col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li><a href="/searchCustomer">Search Customer</a></li>
+					<li><a href="/addCustomer">Add Customer</a></li>
+					<li><a href="/searchMovie">Search Movie</a></li>
+					<li><a href="/addMovie">Add Movie</a></li>
+					
+					
+				</div>
+			</div>
+			<div class="col-md-10 col-md-offset-2">
+				<div class="pull-right" id="signout">
+					<form action="/loginPage">
+						<input class="btn btn-primary" type="submit" name="submit"
+						value="Sign Out" />
+					</form>
+				</div>
+				
+			<h2>Movie List</h2>
 	<table class="table table-bordered table-hover">
 		<tr>
 			<th>Movie Name</th>
@@ -49,30 +125,10 @@
 
 		</form>
 	</table>
-
+				
+			</div>
+	
+	</div>
+	
 </body>
-<script>
-<!--
-	var frm = $("#movieList");
-	
-		$("#deleteMovie").click(function() {
-			if ($('#movieId')) {
-			$.ajax({
-				type : frm.attr('method'),
-				url : "/deleteMovie",
-				data : frm.serialize(),
-				success : function(data) {
-					$(function() {
-						alert("Movies removed" + data);
-					});
-				}
-			});
-			}else{ alert("Please select a movie to delete");}
-			ev.preventDefault();
-		});
-
-	
-		-->		
-</script>
-
 </html>

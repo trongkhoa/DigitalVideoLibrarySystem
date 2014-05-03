@@ -2,18 +2,70 @@
 <html>
 <head>
 <title>Search Movie</title>
+<style type="text/css">
+
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 20px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #F5F5F5;
+    border-right: 1px solid #EEE;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+ #signout {
+ 	margin-top: 20px;
+ }
+</style>
 
 </head>
 <body>
-	<h1>Movie List</h1>
-	<h3>
-		Search for a Movie <span class="glyphicon glyphicon-search"></span>
-	</h3>
+
+<div class="container-fluid">
+		
 	
-	<div class="container">
+		<div class="row">
+			<div class="col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li><a href="/searchCustomer">Search Customer</a></li>
+					<li><a href="/addCustomer">Add Customer</a></li>
+					<li><a href="/searchMovie">Search Movie</a></li>
+					<li><a href="/addMovie">Add Movie</a></li>
+					
+					
+				</div>
+			</div>
+			<div class="col-md-10 col-md-offset-2">
+				<div class="pull-right" id="signout">
+					<form action="/loginPage">
+						<input class="btn btn-primary" type="submit" name="submit"
+						value="Sign Out" />
+					</form>
+				</div>
+				
+	<h3>
+		Search for a Movie and Issue <span class="glyphicon glyphicon-search"></span>
+	</h3>
 	<form class="form-inline" role="form" id="getMovies" name="getMovies" action="/DisplayAllMoviesJSON"
 			method="POST">
-  <div class="form-group">
+			
+		<div class="form-group">
     <label class="sr-only" for="movieName">Movie Name</label>
     <input type="text" name="movieName" class="form-control" id="mname" placeholder="Movie Name">
   </div>
@@ -31,9 +83,8 @@
   </div>
   <button type="submit" class="btn btn-primary">Search</button>
 </form>
-
-</div>
-	<input type="hidden" value="<%= member%>" id="memshipno">;
+				
+	<input type="hidden" value="<%= member%>" id="memshipno">
 	<table class="table table-bordered table-hover" id="movieTable" name="movieTable">
 		<tr>
 			<th>Movie Name</th>
@@ -100,5 +151,10 @@ frm.submit(function (ev) {
 
 
 </script>
+				
+			</div>
+	
+	</div>
+	
 </body>
 </html>
