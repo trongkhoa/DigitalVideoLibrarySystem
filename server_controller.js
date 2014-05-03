@@ -431,6 +431,52 @@ app
 
 				});
 
+// -----------Helper function-----------//
+function movieTransaction(membershipno, itemid,available) {
+
+	// --------//Substract 1 from movies//----------//
+	var qSubMovies = "UPDATE `movies` SET `availableCopies` = `availableCopies` - 1, `status` = " + connection.escape(available) +
+			" WHERE `id` = "
+			+ itemid;
+
+	connection.query(qSubMovies, function(err1, result1) {
+		if (err1) {
+			console.log("Error can't subtract 1 from movies" + err1);
+			connection.rollback(function() {
+				throw err;
+			});
+		} else {
+			console.log("Succesfully substract 1 from movies" + result1);
+		}
+	});
+
+	// --------//Add 1 to Cart//----------//
+	var qCart = "INSERT INTO `videolibrarymanagement`.`cart` (`transactionId`, `membershipNo`, `movieId`, `issuedDate`, `status`) "
+			+ "VALUES (NULL, "
+			+ membershipno
+			+ ", "
+			+ itemid
+			+ ", "
+			+ "NOW()"
+			+ ", " + "'pending')";
+	console.log(qCart);
+
+	connection.query(qCart, function(err2, result2) {
+		if (err2) {
+			res.send("Error can't insert into cart" + err2);
+			connection.rollback(function() {
+				throw err;
+			});
+		} else {
+			console.log('add To Cart successfully!');
+			// res.send("Add movie to cart successfully");
+		}
+
+	});
+	// ------------------//
+
+}
+
 // -----------Add Movie To Cart-----------//
 app.post('/addMovieToCart', function(req, res) {
 	var membershipno = req.param("membershipno");
@@ -444,46 +490,61 @@ app.post('/addMovieToCart', function(req, res) {
 		if (err) {
 			res.send("Error can't insert into cart" + err);
 		} else {
-			var quantity =result[0].availableCopies;
+			var quantity = result[0].availableCopies;
 			console.log("Current quantity: " + quantity);
-			if (quantity > 1){
-				var qSubMovies = "UPDATE `movies` SET `availableCopies` = `availableCopies` - 1 WHERE `id` = " + itemid;
-				connection.query(qSubMovies, function(err1, result1) {
-					if (err1) {
-						console.log("Error can't subtract 1 from movies" + err1);
-					} else {
-						console.log("Succesfully substract 1 from movies" + result1);
-						
-						var qCart ="INSERT INTO `videolibrarymanagement`.`cart` (`transactionId`, `membershipNo`, `movieId`, `issuedDate`, `status`) " +
-								"VALUES (NULL, " +
-								connection.escape(membershipno) +
-								", " +
-								connection.escape(itemid) +
-								", " +
-								"NOW()" +
-								", " +
-								"'pending')"; 
-						console.log(qCart);		
-					
-						connection.query(qCart, function(err2, result2) {
-							if (err2) {
-								res.send("Error can't insert into cart" + err2);
-							} else {
-								
-								res.send("Add movie to cart successfully");
-							}
-					
-						});
+			if (quantity > 1) {
+				// ---Transaction------//
+				connection.beginTransaction(function(err) {
+
+					if (err) {
+						throw err;
 					}
+					movieTransaction(membershipno, itemid,"available");
+					// --------Commit----------//
+					connection.commit(function(err) {
+						if (err) {
+							connection.rollback(function() {
+								throw err;
+							});
+						}
+						res.send("Add movie to cart successfully");
+						console.log('Transaction add To Cart successfully!');
+					});
+
+					// --------End Commit----------//
+					// ---End Transaction------//
 				});
-				res.send("Add movie to cart successfully");
-			
-			}
-		}
+			}else if (quantity ==1){
+				// ---Transaction------//
+				connection.beginTransaction(function(err) {
 
-	});
+					if (err) {
+						throw err;
+					}
+					movieTransaction(membershipno, itemid,"unavailable");
+					
+					// --------Commit----------//
+					connection.commit(function(err) {
+						if (err) {
+							connection.rollback(function() {
+								throw err;
+							});
+						}
+						res.send("Add movie to cart successfully");
+						console.log('Transaction add To Cart successfully!');
+					});
 
+					// --------End Commit----------//
+					// ---End Transaction------//
+				});
+				
+			}else{
+				res.send("Run out of stock.");
+			}// End if Quantity
+		}// End if on Select quantity
+	});// Query Quantity
 });
+
 // -----------Issue a Movie-----------//
 app.post('/issueMovie', function(req, res) {
 	var userInfo = req.param("member");
@@ -524,37 +585,42 @@ app.post('/issueMovie', function(req, res) {
 
 });
 // -----------Return a Movie-----------//
-app.post('/returnMovie', function(req, res) {
-	var memberInfo = req.param("member");
-	if(connection){
-	var query = "SELECT s.fname , s.lname , m.name, c.issuedDate FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = " + connection.escape(memberInfo);
-	
-	console.log("Edit a movie " + "Query : " + query);
-	connection.query(query, function(err, movies) {
-		if (err) {
-			console.log("Can't add new movie to DB");
-			return res.send('Failed to created a new movie');
-		} else {
-			console.log(movies);
-			ejs.renderFile('./views/returnMovie.ejs', {
-		"movies" : movies
-	}, function(err, result) {
-		// render on success
-		if (!err) {
-			res.end(result);
-		}
-		// render or error
-		else {
-			res.end('An error occurred');
-			console.log(err);
-		}
-	});
-	console.log("Edit member: " + memberInfo);
+app
+		.post(
+				'/returnMovie',
+				function(req, res) {
+					var memberInfo = req.param("member");
+					if (connection) {
+						var query = "SELECT s.fname , s.lname , m.name, c.issuedDate FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = "
+								+ connection.escape(memberInfo);
 
-}
-	});
-	}
-});
+						console.log("Edit a movie " + "Query : " + query);
+						connection.query(query, function(err, movies) {
+							if (err) {
+								console.log("Can't add new movie to DB");
+								return res
+										.send('Failed to created a new movie');
+							} else {
+								console.log(movies);
+								ejs.renderFile('./views/returnMovie.ejs', {
+									"movies" : movies
+								}, function(err, result) {
+									// render on success
+									if (!err) {
+										res.end(result);
+									}
+									// render or error
+									else {
+										res.end('An error occurred');
+										console.log(err);
+									}
+								});
+								console.log("Edit member: " + memberInfo);
+
+							}
+						});
+					}
+				});
 // -----------Edit a Movie-----------//
 app.post('/editMovie', function(req, res) {
 	var movieInfo = req.param("movieId");
@@ -987,15 +1053,13 @@ app.post('/DisplayAllMembers', function(req, res) {
 		} else if (membershipNo) {
 			membershipNo = membershipNo + "%";
 			console.log(membershipNo);
-			query = "select * from customers where membershipno like "
-					+ connection.escape(membershipNo);
+			query = "select * from customers where membershipno like "	+ connection.escape(membershipNo);
 			console.log("SQL search for membershipNo:" + query);
 
 		} else if (address) {
 			address = address + "%";
 			console.log(address);
-			query = "select * from customers where address like "
-					+ connection.escape(address);
+			query = "select * from customers where address like " + connection.escape(address);
 			console.log("SQL search for address:" + query);
 
 		} else if (city) {
