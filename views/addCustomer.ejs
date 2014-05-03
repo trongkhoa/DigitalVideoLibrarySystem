@@ -2,6 +2,43 @@
 <html>
 <head>
 <title>Add Customer</title>
+<style type="text/css">
+
+body{
+/*background-image:url('/test1.jpg');*/
+}
+#buttons {
+	border-right: 1px solid #eee;
+}
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 20px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #F5F5F5;
+    border-right: 1px solid #EEE;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+ #signout {
+ 	margin-top: 20px;
+ }
+</style>
 
 <script type="text/javascript">
 	function IsValidZipCode(zip) {
@@ -30,33 +67,100 @@
 
 </head>
 <body>
+
+<div class="container-fluid">
+		
+	
+		<div class="row">
+			<div class="col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li><a href="/searchCustomer">Search Customer</a></li>
+					<li><a href="/addCustomer">Add Customer</a></li>
+					<li><a href="/searchMovie">Search Movie</a></li>
+					<li><a href="/addMovie">Add Movie</a></li>
+					
+					
+				</div>
+			</div>
+			<div class="col-md-10 col-md-offset-2">
+				<div class="pull-right" id="signout">
+					<form action="/loginPage">
+						<input class="btn btn-primary" type="submit" name="submit"
+						value="Sign Out" />
+					</form>
+				</div>
+			
 	<h2>Add a new Member</h2>
-	<form class="navbar-form navbar-left" role="search"
+	
+	<form role="form"
 		action="/addNewMember" method="POST">
-		<div class="col-xs-2"> 
+		
 		<div class="form-group">
-		Member Type:
-			<div class="radio">
-				<label> <input type="radio" name="member" id="1"
+			
+			<label class="radio-inline"> <input type="radio" name="member" id="1"
 					value="1" checked> Premium Member
 				</label>
-			</div>
-			<div class="radio">
-				<label> <input type="radio" name="member" id="0"
+						
+				<label class="radio-inline"> <input type="radio" name="member" id="0"
 					value="0"> Simple Member
 				</label>
+				
 			</div>
-			<br><br> First Name: <input type="text" name="firstName" id="fname"
-				class="form-control" placeholder="First Name" required ></input><br> <br>
-			Last Name: <input type="text" name="lastName" id="lname"
-				class="form-control" placeholder="Last Name" required></input><br> <br>
-			MembershipNo : <input type="text" name="memNum" id="memNum"
-				class="form-control" placeholder="Membership number" required></input><br> <br>
-			Address: <input type="text" name="address" id="address"
-				class="form-control" placeholder="123 Somewhere St" required></input><br>
-			<br> City: <input type="text" name="city" id="city"
-				class="form-control" placeholder="City" required></input><br> <br>
-			State: <select class="form-control" name="state" id="state">
+			
+			<div class="row">
+			<div class="form-group col-md-3">
+				<label for="firstName" class="control-label">First name</label>
+		
+				 <input type="text" name="firstName"
+					id="fname" class="form-control" placeholder="First Name" required></input>
+				
+			</div>
+			</div>
+			
+			<div class="row">
+			<div class="form-group col-md-3">
+				<label for="firstName" class="control-label">Last Name</label>
+				
+				 <input type="text" name="lastName"
+					id="lname" class="form-control" placeholder="Last Name" required></input>
+				
+			</div>
+			</div>
+			
+			<div class="row">
+			<div class="form-group col-md-3">
+				<label for="memNum" class="control-label">Membership No</label>
+				
+				 <input type="text" name="memNum"
+					id="memNum" class="form-control" placeholder="XXX-XX-XXXX" required></input>
+				
+			</div>
+			</div>
+			
+				<div class="row">
+			<div class="form-group col-md-3">
+				<label for="address" class="control-label">Address</label>
+				
+				 <input type="text" name="address" id="address"
+					class="form-control" placeholder="123 Somewhere St" required></input>
+			</div>
+			</div>
+			
+				<div class="row">
+			<div class="form-group col-md-3">
+				<label for="city" class="control-label">City</label>
+				
+				<input type="text" name="city" id="city"
+				class="form-control" placeholder="Your City" required></input>
+				 
+			</div>
+			</div>
+			
+				<div class="row">
+			<div class="form-group col-md-3">
+				<label for="state" class="control-label">State</label>
+	
+				<select class="form-control" name="state" id="state">
 				<option value="">default</option>
 				<option value="AL">Alabama</option>
 				<option value="AK">Alaska</option>
@@ -109,8 +213,20 @@
 				<option value="WV">West Virginia</option>
 				<option value="WI">Wisconsin</option>
 				<option value="WY">Wyoming</option>
-			</select><br> <br> ZipCode: <input type="text" name="zipCode"
-				id="zipCode" class="form-control" placeholder="Zip Code" required></input> <br><br>
+			</select>
+			</div>
+			</div>
+				
+					<div class="row">
+			<div class="form-group col-md-3">
+				<label for="zipCode" class="control-label">Zip Code</label>
+				
+				<input type="text" name="zipCode"
+				id="zipCode" class="form-control" placeholder="Zip Code" required></input>
+				 
+			</div>
+			</div>
+			
 			<button type="submit" class="btn btn-primary" value="Add New Member"
 			onclick="return IsValidMemberNo(this.form.memNum.value) || IsValidZipCode(this.form.zipCode.value);">Submit</button>
 			
@@ -119,5 +235,9 @@
 		
 
 	</form>
+				
+			</div>
+	
+	</div>
 </body>
 </html>
