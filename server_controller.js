@@ -432,12 +432,11 @@ app
 				});
 
 // -----------Helper function-----------//
-function movieTransaction(membershipno, itemid,available) {
-
+function movieTransaction(membershipno, itemid, available) {
+	
 	// --------//Substract 1 from movies//----------//
-	var qSubMovies = "UPDATE `movies` SET `availableCopies` = `availableCopies` - 1, `status` = " + connection.escape(available) +
-			" WHERE `id` = "
-			+ itemid;
+	var qSubMovies = "UPDATE `movies` SET `availableCopies` = `availableCopies` - 1, `status` = "
+			+ connection.escape(available) + " WHERE `id` = " + itemid;
 
 	connection.query(qSubMovies, function(err1, result1) {
 		if (err1) {
@@ -463,7 +462,7 @@ function movieTransaction(membershipno, itemid,available) {
 
 	connection.query(qCart, function(err2, result2) {
 		if (err2) {
-			res.send("Error can't insert into cart" + err2);
+			console.log("Error can't insert into cart" + err2);
 			connection.rollback(function() {
 				throw err;
 			});
@@ -476,14 +475,74 @@ function movieTransaction(membershipno, itemid,available) {
 	// ------------------//
 
 }
+function movieReturnTransaction(itemReturn) {
+	console.log("Return: " + itemReturn.movieId);
+	var issueDate = new Date(itemReturn.issuedDate)
+	console.log("Issue date: " + issueDate.toISOString());
+	var formattedIssuedDate = issueDate.getUTCFullYear() + "-" + issueDate.getUTCMonth() + "-" + issueDate.getUTCDate() +" " + issueDate.getUTCHours() +":"+ issueDate.getUTCMinutes() + ":" + issueDate.getUTCSeconds();
+	console.log("Format date" + formattedIssuedDate);
+	// --------//Substract 1 from movies//----------//
+	var qSubMovies = "UPDATE `movies` SET `availableCopies` = `availableCopies` + 1, `status` = 'available'"
+			+ " WHERE `id` = " + itemReturn.movieId;
 
+	connection.query(qSubMovies, function(err, result) {
+		if (err) {
+			console.log("Error can't add 1 from movies" + err);
+			connection.rollback(function() {
+				throw err;
+			});
+		} else {
+			console.log("Succesfully add 1 from movies" + result);
+		}
+	});
+	var qCart = "UPDATE `cart` SET `status` = 'returned' "
+			+ " WHERE `transactionId` = " + itemReturn.transactionId;
+	console.log (qCart);
+	connection.query(qCart, function(err1, result1) {
+		if (err1) {
+			console.log("Error can't change status on cart" + err1);
+			connection.rollback(function() {
+				throw err1;
+			});
+		} else {
+			console.log("Succesfully changed status on cart" + result1);
+		}
+	});
+	// --------//ReturnedMovie//----------//
+	var qReturnMovies = "INSERT INTO `videolibrarymanagement`.`moviesReturn` (`id`, `membershipno`, `movieid`, `issuedDate`, `returnDate`) "
+			+ "VALUES (NULL, "
+			+ connection.escape(itemReturn.membershipno)
+			+ ", "
+			+ itemReturn.movieId
+			+ ", "
+			+ connection.escape(formattedIssuedDate)
+			+ ", "
+			+ "NOW())";
+	console.log(qReturnMovies);
+
+	connection.query(qReturnMovies, function(err2, result2) {
+		if (err2) {
+			//res.send("Error can't return movie" + err2);
+			console.log("Error can't return movie" + err2);
+			connection.rollback(function() {
+				throw err2;
+			});
+		} else {
+			console.log('Successfully return movie');
+			// res.send("Add movie to cart successfully");
+		}
+
+	});
+	// ------------------//
+
+}
 // -----------Add Movie To Cart-----------//
 app.post('/addMovieToCart', function(req, res) {
 	var membershipno = req.param("membershipno");
 	var itemid = req.param("itemid");
 	console.log("membershipno: " + membershipno);
 	console.log("itemid: " + itemid);
-	itemid = connection.escape(itemid);
+	// itemid = connection.escape(itemid);
 	membershipno = connection.escape(membershipno);
 	var query = "Select availableCopies FROM movies Where id= " + itemid;
 	connection.query(query, function(err, result) {
@@ -499,7 +558,7 @@ app.post('/addMovieToCart', function(req, res) {
 					if (err) {
 						throw err;
 					}
-					movieTransaction(membershipno, itemid,"available");
+					movieTransaction(membershipno, itemid, "available");
 					// --------Commit----------//
 					connection.commit(function(err) {
 						if (err) {
@@ -514,15 +573,15 @@ app.post('/addMovieToCart', function(req, res) {
 					// --------End Commit----------//
 					// ---End Transaction------//
 				});
-			}else if (quantity ==1){
+			} else if (quantity == 1) {
 				// ---Transaction------//
 				connection.beginTransaction(function(err) {
 
 					if (err) {
 						throw err;
 					}
-					movieTransaction(membershipno, itemid,"unavailable");
-					
+					movieTransaction(membershipno, itemid, "unavailable");
+
 					// --------Commit----------//
 					connection.commit(function(err) {
 						if (err) {
@@ -537,8 +596,8 @@ app.post('/addMovieToCart', function(req, res) {
 					// --------End Commit----------//
 					// ---End Transaction------//
 				});
-				
-			}else{
+
+			} else {
 				res.send("Run out of stock.");
 			}// End if Quantity
 		}// End if on Select quantity
@@ -591,7 +650,7 @@ app
 				function(req, res) {
 					var memberInfo = req.param("member");
 					if (connection) {
-						var query = "SELECT s.fname , s.lname , m.name, c.issuedDate FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = "
+						var query = "SELECT s.fname , s.lname , m.name, c.issuedDate, c.transactionId, c.status, c.movieId, s.membershipno FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = "
 								+ connection.escape(memberInfo);
 
 						console.log("Edit a movie " + "Query : " + query);
@@ -621,6 +680,56 @@ app
 						});
 					}
 				});
+
+// -----------ReturnIssuedMovie--------//
+app.post('/returnIssuedMovies', [ express.urlencoded(), express.json() ],
+		function(req, res) {
+			console.log("post data " + JSON.stringify(req.body));
+			var itemReturn = req.body;
+			console.log("post data " + itemReturn.membershipno);
+			var query = "Select status From Cart Where `transactionId` = " + connection.escape(itemReturn.transactionId);
+			connection.query(query, function(error, result){
+				if (error){
+					throw error;
+				}else{
+					var status = result[0].status;
+					console.log("item status: " + status);
+					if (status ==="pending"){
+						// ---Transaction------//
+						connection.beginTransaction(function(err) {
+
+							if (err) {
+								throw err;
+							}
+							movieReturnTransaction(itemReturn);
+							// --------Commit----------//
+							connection.commit(function(err) {
+								if (err) {
+									connection.rollback(function() {
+										throw err;
+									});
+								}
+								res.send("Add movie to cart successfully");
+								console.log('Transaction add To Cart successfully!');
+							});
+
+							// --------End Commit----------//
+
+							// ---End Transaction------//
+							//res.send("Successfully return movie!");
+
+						});
+						
+					}
+					else{
+						res.send("Can't return a returned movie");
+					}
+				}
+				
+			});
+			
+		});
+
 // -----------Edit a Movie-----------//
 app.post('/editMovie', function(req, res) {
 	var movieInfo = req.param("movieId");
@@ -925,10 +1034,8 @@ app.get('/DisplayAllMembersJSON', function(req, res) {
 });
 
 // For Display members on all pages //
-app.get('/displayMembers', function(req,res)
-{
-	if(connection)
-		{
+app.get('/displayMembers', function(req, res) {
+	if (connection) {
 		var query = "select * from customers";
 		connection.query(query, function(err, members) {
 			console.log(members);
@@ -952,19 +1059,16 @@ app.get('/displayMembers', function(req,res)
 				console.log("Something wrong with DB MYSQL");
 
 			}
-	});
-		}
+		});
+	}
 });
 
-
 // ---- For Display movies on all pages---- //
-app.get('/displayMovies', function(req,res)
-{
-	if(connection)
-		{
+app.get('/displayMovies', function(req, res) {
+	if (connection) {
 		var query = "select * from movies";
 		connection.query(query, function(err, movies) {
-			console.log(members);
+			console.log(query);
 			if (!err) {
 				ejs.renderFile('./views/movieList.ejs', {
 					"movies" : movies
@@ -985,17 +1089,9 @@ app.get('/displayMovies', function(req,res)
 				console.log("Something wrong with DB MYSQL");
 
 			}
-	});
-		}
+		});
+	}
 });
-
-
-
-
-
-
-
-
 
 // -----------Search for All Members------//
 app.post('/DisplayAllMembers', function(req, res) {
@@ -1053,13 +1149,15 @@ app.post('/DisplayAllMembers', function(req, res) {
 		} else if (membershipNo) {
 			membershipNo = membershipNo + "%";
 			console.log(membershipNo);
-			query = "select * from customers where membershipno like "	+ connection.escape(membershipNo);
+			query = "select * from customers where membershipno like "
+					+ connection.escape(membershipNo);
 			console.log("SQL search for membershipNo:" + query);
 
 		} else if (address) {
 			address = address + "%";
 			console.log(address);
-			query = "select * from customers where address like " + connection.escape(address);
+			query = "select * from customers where address like "
+					+ connection.escape(address);
 			console.log("SQL search for address:" + query);
 
 		} else if (city) {

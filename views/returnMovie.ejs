@@ -70,15 +70,26 @@
 			<th>Select to return</th>
 
 	</tr>
-	<tr>	
+		
 	
 	<% for(var i = 0; i< movies.length; i++){ %>
+	<tr <%
+		if (movies[i].status =="returned"){
+	%>
+			class="danger"
+				<%
+				}else{%>
+					class="success"
+				<%}
+				 %>  >
 			<td><%= movies[i].fname %></td>
 			<td><%= movies[i].lname %></td>
 			<td><%= movies[i].name %></td>
 			<td><%= movies[i].issuedDate %></td>
-			<td><button type="submit" class="btn btn-default" value="Return Movie">Return</button></td>
-				
+			<td>
+			<%if ((movies[i].status =="pending")){ %>
+			<button type="submit" class="btn btn-default" value="Return Movie" id="button_<%=movies[i].membershipno%>_return" name="<%=JSON.stringify(movies[i])%>">Return</button></td>
+				<%}%>
 		</tr>
 			<% } %>
 			
@@ -90,6 +101,35 @@
 			</div>
 	
 	</div>
-	
+<script>
+$.each($('[id^=button_]'),function(){
+	console.log(this);
+	$(this).click(function(){
+		var returnItem = $.parseJSON($(this).attr('name')); 
+		
+		   $.ajax({
+		        type: "POST",
+		        url: "returnIssuedMovies",
+		        data: returnItem,
+		        success: function (data) {
+		        	console.log(data);
+		        	var s = /success/i;
+		        	if (s.test(data)){
+		        		alert("Successfully Returned movie");
+		        		//location.reload(true);
+		        	}
+		        	else{
+		        		alert("Error can't return a returned movie");
+		        	}
+		        	
+		        	
+		        }
+		    });
+
+	});
+})
+
+
+</script>	
 </body>
 </html>
