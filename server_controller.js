@@ -718,12 +718,6 @@ app.post('/DisplayAllMoviesJSON', function(req, res) {
 
 		}
 
-		// //Display all movies
-		// else{
-		//			
-		// query = "select * from movies";
-		// }
-
 		// Query and render the output of the DB to JSON objects
 		connection.query(query, function(err, movies) {
 			console.log(movies);
@@ -808,12 +802,6 @@ app.post('/DisplayAllMovies', function(req, res) {
 			console.log("SQL search for rent Amount:" + query);
 		}
 
-		// //Display all movies
-		// else{
-		//			
-		// query = "select * from movies";
-		// }
-
 		// Query and render the output of the DB to JSON objects
 		connection.query(query, function(err, movies) {
 			console.log(movies);
@@ -869,6 +857,79 @@ app.get('/DisplayAllMembersJSON', function(req, res) {
 	}
 
 });
+
+// For Display members on all pages //
+app.get('/displayMembers', function(req,res)
+{
+	if(connection)
+		{
+		var query = "select * from customers";
+		connection.query(query, function(err, members) {
+			console.log(members);
+			if (!err) {
+				ejs.renderFile('./views/memberList.ejs', {
+					"members" : members
+				}, // <--- JSON passed to EJS
+				function(err, result) {
+					// render on success
+					if (!err) {
+						res.end(result);
+					}
+					// render or error
+					else {
+						res.end('An error occurred');
+						console.log(err);
+					}
+				});
+
+			} else {
+				console.log("Something wrong with DB MYSQL");
+
+			}
+	});
+		}
+});
+
+
+// ---- For Display movies on all pages---- //
+app.get('/displayMovies', function(req,res)
+{
+	if(connection)
+		{
+		var query = "select * from movies";
+		connection.query(query, function(err, movies) {
+			console.log(members);
+			if (!err) {
+				ejs.renderFile('./views/movieList.ejs', {
+					"movies" : movies
+				}, // <--- JSON passed to EJS
+				function(err, result) {
+					// render on success
+					if (!err) {
+						res.end(result);
+					}
+					// render or error
+					else {
+						res.end('An error occurred');
+						console.log(err);
+					}
+				});
+
+			} else {
+				console.log("Something wrong with DB MYSQL");
+
+			}
+	});
+		}
+});
+
+
+
+
+
+
+
+
 
 // -----------Search for All Members------//
 app.post('/DisplayAllMembers', function(req, res) {
