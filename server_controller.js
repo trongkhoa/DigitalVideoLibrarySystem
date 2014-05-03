@@ -502,7 +502,7 @@ app.post('/issueMovie', function(req, res) {
 app.post('/returnMovie', function(req, res) {
 	var memberInfo = req.param("member");
 	if(connection){
-	var query = "SELECT s.fname , s.lname , m.name FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = " + connection.escape(memberInfo);
+	var query = "SELECT s.fname , s.lname , m.name, c.issuedDate FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = " + connection.escape(memberInfo);
 	
 	console.log("Edit a movie " + "Query : " + query);
 	connection.query(query, function(err, movies) {
