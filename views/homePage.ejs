@@ -1,40 +1,73 @@
 <% include bootstrap.ejs %>
 <html>
 <head>
+<style type="text/css">
+
+body{
+/*background-image:url('/test1.jpg');*/
+}
+#buttons {
+	border-right: 1px solid #eee;
+}
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 20px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #F5F5F5;
+    border-right: 1px solid #EEE;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+ #signout {
+ 	margin-top: 20px;
+ }
+</style>
+
 <title>homePage</title>
 </head>
 <body>
-	<div class="jumbotron">
-		<div class="container">
-			<h1 class="text-center">Home Page</h1>
-			<br>
-			<p class="text-left">Please Select Options</p>
-		</div>
-		<div class='row'>
-			<form action="/loginPage">
-				<input class="col-md-4 col-md-offset-4" type="submit" name="submit"
-					value="Sign Out" style="float: right;" />
-			</form>
-		</div>
-	</div>
-
-
-	<div class="jumbotron">
-
-		<form action="/searchCustomer" method="post">
-			<label> Search Member </label> <input type="submit" class="btn btn-primary" name="submit"
-				value="Search Member" />
-		</form>
-		<form action="/addCustomer" method="post">
-			Create Member:<input type="submit" class="btn btn-primary" name="submit"
-				value="Create Member" />
-		</form>
-		<form action="/searchMovie" method="post">
-			Search Movie:<input type="submit" name="submit" class="btn btn-primary" value="Search Movie" />
-		</form>
-		<form action="/addMovie" method="post">
-			Create Movie:<input type="submit" name="submit" class="btn btn-primary" value="Create Movie" />
-		</form>
+	<div class="container-fluid">
+		
+	
+		<div class="row">
+			<div class="col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li><a href="/searchCustomer">Search Customer</a></li>
+					<li><a href="/addCustomer">Add Customer</a></li>
+					<li><a href="/searchMovie">Search Movie</a></li>
+					<li><a href="/addMovie">Add Movie</a></li>
+					
+					
+				</div>
+			</div>
+			<div class="col-md-10 col-md-offset-2">
+				<div class="pull-right" id="signout">
+					<form action="/loginPage">
+						<input class="btn btn-primary" type="submit" name="submit"
+						value="Sign Out" />
+					</form>
+				</div>
+				
+				<h1 class="text-center">Home Page</h1>
+				
+			</div>
+	
 	</div>
 </body>
 </html>

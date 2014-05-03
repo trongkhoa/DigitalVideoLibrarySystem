@@ -100,7 +100,7 @@ app.get('/home', function(req, res) {
 
 });
 
-app.post('/addCustomer', function(req, res) {
+app.get('/addCustomer', function(req, res) {
 
 	ejs.renderFile('./views/addCustomer.ejs', {
 		title : title,
@@ -119,7 +119,7 @@ app.post('/addCustomer', function(req, res) {
 
 });
 
-app.post('/addMovie', function(req, res) {
+app.get('/addMovie', function(req, res) {
 
 	ejs.renderFile('./views/addMovie.ejs', {
 		title : title,
@@ -138,7 +138,7 @@ app.post('/addMovie', function(req, res) {
 
 });
 
-app.post('/searchCustomer', function(req, res) {
+app.get('/searchCustomer', function(req, res) {
 
 	ejs.renderFile('./views/searchCustomer.ejs', {
 		title : title,
@@ -283,7 +283,7 @@ app
 
 				});
 
-app.post('/searchMovie', function(req, res) {
+app.get('/searchMovie', function(req, res) {
 
 	ejs.renderFile('./views/searchMovie.ejs', {
 		title : title,
