@@ -437,21 +437,27 @@ app.post('/addMovieToCart', function(req, res) {
 	var itemid = req.param("itemid");
 	console.log("membershipno: " + membershipno);
 	console.log("itemid: " + itemid);
-	// res.send("Successfully edit the member" + userInfo);
-//	var query = 'INSERT INTO status From customers Where membershipno='
-//			+ connection.escape(userInfo);
-//
-//	connection.query(query, function(err, result) {
-//		if (err) {
-//			res.send("Error can't insert into cart" + err);
-//		} else {
-//			// res.render('issuedMovies.ejs');
-//			
-//			res.send("Add movie to cart successfully");
-//		}
-//
-//	});
-	res.send("Add movie to cart successfully");
+	
+	var query ="INSERT INTO `videolibrarymanagement`.`cart` (`transactionId`, `membershipNo`, `movieId`, `issuedDate`, `status`) " +
+			"VALUES (NULL, " +
+			connection.escape(membershipno) +
+			", " +
+			connection.escape(itemid) +
+			", " +
+			"NOW()" +
+			", " +
+			"'pending')"; 
+	console.log(query);		
+
+	connection.query(query, function(err, result) {
+		if (err) {
+			res.send("Error can't insert into cart" + err);
+		} else {
+			
+			res.send("Add movie to cart successfully");
+		}
+
+	});
 });
 // -----------Issue a Movie-----------//
 app.post('/issueMovie', function(req, res) {

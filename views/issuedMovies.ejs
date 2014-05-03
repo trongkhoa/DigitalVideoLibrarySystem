@@ -133,6 +133,13 @@ frm.submit(function (ev) {
             	    		url: "addMovieToCart",
             	    		data: {membershipno: obj.membershipno, itemid: obj.itemid},
             	    		success: function(data){
+            	    			var regex = new RegExp("successfully");
+            	    			if(regex.test(data)){
+            	    				alert('Successfully added to cart');
+            	    			}else{
+            	    				alert('Failed to add');
+            	    			}
+            	    			
             	    			console.log(data);
             	    		}
             	    		
