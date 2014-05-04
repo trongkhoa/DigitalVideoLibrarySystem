@@ -3,42 +3,41 @@
 <head>
 <title>Search Member</title>
 <style type="text/css">
-
 .nav-sidebar {
-    margin-right: -21px;
-    margin-bottom: 20px;
-    margin-left: -20px;
+	margin-right: -21px;
+	margin-bottom: 20px;
+	margin-left: -20px;
 }
 
 .sidebar {
-    position: fixed;
-    top: 20px;
-    bottom: 0px;
-    left: 0px;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background-color: #F5F5F5;
-    border-right: 1px solid #EEE;
+	position: fixed;
+	top: 20px;
+	bottom: 0px;
+	left: 0px;
+	z-index: 1000;
+	display: block;
+	padding: 20px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background-color: #F5F5F5;
+	border-right: 1px solid #EEE;
 }
 
-.nav-sidebar > li > a {
-    padding-right: 20px;
-    padding-left: 20px;
+.nav-sidebar>li>a {
+	padding-right: 20px;
+	padding-left: 20px;
 }
 
- #signout {
- 	margin-top: 20px;
- }
+#signout {
+	margin-top: 20px;
+}
 </style>
 </head>
 <body>
 
-<div class="container-fluid">
-		
-	
+	<div class="container-fluid">
+
+
 		<div class="row">
 			<div class="col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
@@ -48,88 +47,112 @@
 					<li><a href="/addMovie">Add Movie</a></li>
 					<li><a href="/displayMembers">Display Members</a></li>
 					<li><a href="/displayMovies">Display Movies</a></li>
-					</ul>	
-				</div>
+				</ul>
 			</div>
-			<div class="col-md-10 col-md-offset-2">
-				<div class="pull-right" id="signout">
-					<form action="/loginPage">
-						<input class="btn btn-primary" type="submit" name="submit"
+		</div>
+		<div class="col-md-10 col-md-offset-2">
+			<div class="pull-right" id="signout">
+				<form action="/loginPage">
+					<input class="btn btn-primary" type="submit" name="submit"
 						value="Sign Out" />
-					</form>
-				</div>
-				
-				<h2>Return Movie List</h2>
-				
-	<table class="table table-bordered table-hover">
-		<tr>
-			<th>First Name</th>
-			<th>Last Name</th>
-			<th>Movie Name</th>
-			<th>Issued Date</th>>
-			<th>Select to return</th>
+				</form>
+			</div>
 
-	</tr>
-		
-	
-	<% for(var i = 0; i< movies.length; i++){ %>
-	<tr <%
-		if (movies[i].status =="returned"){
-	%>
-			class="danger"
-				<%
-				}else{%>
-					class="success"
-				<%}
-				 %>  >
-			<td><%= movies[i].fname %></td>
+			<h2>Return Movie List</h2>
+
+			<table class="table table-bordered table-hover">
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Movie Name</th>
+					<th>Issued Date</th>
+					<th>Amount</th>
+					<th>Select to return</th>
+
+				</tr>
+
+
+				<% var totalRent=0; for(var i = 0; i< movies.length; i++){ 
+				totalRent =	totalRent + movies[i].rentAmount; %>
+				<tr
+					<% if (movies[i].status =="returned"){ %> class="danger" <%
+					}else{%> class="success" <%} %> >
+					<td><%= movies[i].fname %></td>
 			<td><%= movies[i].lname %></td>
 			<td><%= movies[i].name %></td>
 			<td><%= movies[i].issuedDate %></td>
+			<td><%= movies[i].rentAmount %></td>
 			<td>
 			<%if ((movies[i].status =="pending")){ %>
 			<button type="submit" class="btn btn-default" value="Return Movie" id="button_<%=movies[i].membershipno%>_return" name="<%=JSON.stringify(movies[i])%>">Return</button></td>
 				<%}%>
 		</tr>
-			<% } %>
-			
-		</div>
-	</table>
-
-	</form>
+				<% } %>
 				
-			</div>
-	
+
+		<tr>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th>Current Balance</th>
+				<th><%=movies[0].amount%></th>
+		</tr>
+		<tr>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th>Rent Movies</th>
+				<th><%=totalRent%></th>
+		</tr>
+			<tr <% if (movies[0].amount - totalRent<0){%>
+				class="danger"<%}else{
+				%>
+				class="success"
+				<%
+				
+				}%>
+			>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th>New Balance</th>
+				<th><%=movies[0].amount - totalRent%></th>
+		</tr>		
+			</table>
+
+			</form>
+
+		</div>
+
 	</div>
-<script>
-$.each($('[id^=button_]'),function(){
-	console.log(this);
-	$(this).click(function(){
-		var returnItem = $.parseJSON($(this).attr('name')); 
-		
-		   $.ajax({
-		        type: "POST",
-		        url: "returnIssuedMovies",
-		        data: returnItem,
-		        success: function (data) {
-		        	console.log(data);
-		        	var s = /success/i;
-		        	if (s.test(data)){
-		        		alert("Successfully Returned movie");
-		        		//location.reload(true);
-		        	}
-		        	else{
-		        		alert("Error can't return a returned movie");
-		        	}
-		        	
-		        	
-		        }
-		    });
+	<script>
+		$.each($('[id^=button_]'), function() {
+			console.log(this);
+			$(this).click(function() {
+				var returnItem = $.parseJSON($(this).attr('name'));
 
-	});
-})
+				$.ajax({
+					type : "POST",
+					url : "returnIssuedMovies",
+					data : returnItem,
+					success : function(data) {
+						console.log(data);
+						var s = /success/i;
+						if (s.test(data)) {
+							alert("Successfully Returned movie");
+							//location.reload(true);
+						} else {
+							alert("Error can't return a returned movie");
+						}
 
+					}
+				});
 
-</script>	
+			});
+		})
+	</script>
 </body>
 </html>

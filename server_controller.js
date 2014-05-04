@@ -326,6 +326,8 @@ app
 						var zipCode = req.param("zipCode");
 
 						var status = req.param("status");
+						
+						var amount = req.param("amount");
 						var oldMembershipNo = req.param("oldMembershipNo");
 
 						// create the query for each one
@@ -347,6 +349,8 @@ app
 								+ connection.escape(memType)
 								+ ',`status` = '
 								+ connection.escape(status)
+								+ ',`amount` = '
+								+ connection.escape(amount)
 								+ 'WHERE `customers`.`membershipno` ='
 								+ connection.escape(oldMembershipNo);
 
@@ -679,15 +683,15 @@ app
 				function(req, res) {
 					var memberInfo = req.param("member");
 					if (connection) {
-						var query = "SELECT s.fname , s.lname , m.name, c.issuedDate, c.transactionId, c.status, c.movieId, s.membershipno FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = "
+						var query = "SELECT s.fname , s.lname , m.name, c.issuedDate, c.transactionId, c.status, c.movieId, s.membershipno, m.rentAmount, s.amount FROM cart c INNER JOIN movies m on c.movieId = m.id INNER JOIN customers s on c.membershipNo = s.membershipno where c.membershipNo = "
 								+ connection.escape(memberInfo);
 
 						console.log("Edit a movie " + "Query : " + query);
 						connection.query(query, function(err, movies) {
 							if (err) {
-								console.log("Can't add new movie to DB");
+								console.log("Can't return movies to DB");
 								return res
-										.send('Failed to created a new movie');
+										.send('Failed to return movies');
 							} else {
 								console.log(movies);
 								ejs.renderFile('./views/returnMovie.ejs', {
