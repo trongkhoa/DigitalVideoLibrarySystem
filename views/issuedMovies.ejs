@@ -101,24 +101,44 @@
 	</table>
 <script type="text/javascript">
 var frm = $('#getMovies');
-
+var available = "<tr class=\"success\" >";
+var unavailable = "<tr class=\"danger\" >";
 function updateTable(data){
 	$(function() {
 		$("#movieTable").find("tr:gt(0)").remove();
 	    $.each(data, function(i, item) {
 	    	if(item.name){
-	    		var button =  $('<input></input>').attr({'type': 'button', 'id': item.id}).val("Add To Cart");
-	        var $tr = $('<tr>').append(
-	            $('<td>').text(item.name),
-	            $('<td>').text(item.bannerName),
-	            $('<td>').text(item.releaseDate),
-	            $('<td>').text(item.category),
-	            $('<td>').text(item.rentAmount),
-	            $('<td>').text(item.availableCopies)
-	            ,$('<td>').append(button)
-	        ).appendTo('#movieTable');
+	    		var temp;
+	    		
+	    		if (item.status == "available"){
+	    			temp = available;
+	    			var button =  $('<input></input>').attr({'type': 'button', 'id': item.id}).val("Add To Cart");
+	    	        var $tr = $(temp).append(
+	    	            $('<td>').text(item.name),
+	    	            $('<td>').text(item.bannerName),
+	    	            $('<td>').text(item.releaseDate),
+	    	            $('<td>').text(item.category),
+	    	            $('<td>').text(item.rentAmount),
+	    	            $('<td>').text(item.availableCopies)
+	    	            ,$('<td>').append(button)
+	    	        ).appendTo('#movieTable');
+	    		}else{
+	    			temp = unavailable;
+	    			var button =  $('<input></input>').attr({'type': 'button', 'id': item.id}).val("Add To Cart");
+	    	        var $tr = $(temp).append(
+	    	            $('<td>').text(item.name),
+	    	            $('<td>').text(item.bannerName),
+	    	            $('<td>').text(item.releaseDate),
+	    	            $('<td>').text(item.category),
+	    	            $('<td>').text(item.rentAmount),
+	    	            $('<td>').text(item.availableCopies)
+	    	            
+	    	        ).appendTo('#movieTable');
+	    		}
+	    		
 	        
 	        $("#movieTable").on('click', '#'+item.id,function(){
+	        	if (item.status == "available"){
     	    	var obj = new Object();
     	    	obj.membershipno=$('#memshipno').attr('value');
     	    	obj.itemid = item.id;
@@ -143,6 +163,10 @@ function updateTable(data){
     	    		
     	    		
     	    	});
+	        	}else{
+	        		
+	        		alert("Movie is no longer available. Please check status");
+	        	}	
     	    });
 	    	}
 	    });

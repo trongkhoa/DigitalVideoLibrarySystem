@@ -433,7 +433,7 @@ app
 
 // -----------Helper function-----------//
 function movieTransaction(membershipno, itemid, available) {
-	
+
 	// --------//Substract 1 from movies//----------//
 	var qSubMovies = "UPDATE `movies` SET `availableCopies` = `availableCopies` - 1, `status` = "
 			+ connection.escape(available) + " WHERE `id` = " + itemid;
@@ -479,7 +479,10 @@ function movieReturnTransaction(itemReturn) {
 	console.log("Return: " + itemReturn.movieId);
 	var issueDate = new Date(itemReturn.issuedDate)
 	console.log("Issue date: " + issueDate.toISOString());
-	var formattedIssuedDate = issueDate.getUTCFullYear() + "-" + issueDate.getUTCMonth() + "-" + issueDate.getUTCDate() +" " + issueDate.getUTCHours() +":"+ issueDate.getUTCMinutes() + ":" + issueDate.getUTCSeconds();
+	var formattedIssuedDate = issueDate.getUTCFullYear() + "-"
+			+ issueDate.getUTCMonth() + "-" + issueDate.getUTCDate() + " "
+			+ issueDate.getUTCHours() + ":" + issueDate.getUTCMinutes() + ":"
+			+ issueDate.getUTCSeconds();
 	console.log("Format date" + formattedIssuedDate);
 	// --------//Substract 1 from movies//----------//
 	var qSubMovies = "UPDATE `movies` SET `availableCopies` = `availableCopies` + 1, `status` = 'available'"
@@ -497,7 +500,7 @@ function movieReturnTransaction(itemReturn) {
 	});
 	var qCart = "UPDATE `cart` SET `status` = 'returned' "
 			+ " WHERE `transactionId` = " + itemReturn.transactionId;
-	console.log (qCart);
+	console.log(qCart);
 	connection.query(qCart, function(err1, result1) {
 		if (err1) {
 			console.log("Error can't change status on cart" + err1);
@@ -515,14 +518,12 @@ function movieReturnTransaction(itemReturn) {
 			+ ", "
 			+ itemReturn.movieId
 			+ ", "
-			+ connection.escape(formattedIssuedDate)
-			+ ", "
-			+ "NOW())";
+			+ connection.escape(formattedIssuedDate) + ", " + "NOW())";
 	console.log(qReturnMovies);
 
 	connection.query(qReturnMovies, function(err2, result2) {
 		if (err2) {
-			//res.send("Error can't return movie" + err2);
+			// res.send("Error can't return movie" + err2);
 			console.log("Error can't return movie" + err2);
 			connection.rollback(function() {
 				throw err2;
@@ -609,36 +610,64 @@ app.post('/issueMovie', function(req, res) {
 	var userInfo = req.param("member");
 	console.log("Edit member: " + userInfo);
 	// res.send("Successfully edit the member" + userInfo);
-	var query = 'Select status From customers Where membershipno='
+	var query = 'Select status, membertype From customers Where membershipno='
 			+ connection.escape(userInfo);
-
+	console.log(query);
+//	SELECT count(*) as numberItem, status
+//	FROM  `videolibrarymanagement`.`cart` 
+//	WHERE  `membershipno` =  '789-12-4568' and `status` = 'pending'
+//	Group By `status`
+	
 	connection.query(query, function(err, result) {
-		if (!err) {
-			var userStatus = result[0].status;
-			var membershipno = result[0].membershipno;
-			console.log("users status " + userStatus + membershipno);
-			if (userStatus === "inactive") {
-				res.send("Can't issue movies to inactive users");
-			} else {
-				// res.render('issuedMovies.ejs');
-				ejs.renderFile('./views/issuedMovies.ejs', {
-					"member" : userInfo
-				}, function(err, result) {
-					// render on success
+		var queryItemHold = "SELECT count(*) as numberItem, status FROM  `videolibrarymanagement`.`cart` WHERE  `membershipno` = " +
+		connection.escape(userInfo) +
+				" and `status` = 'pending' Group By `status`";
+		console.log(queryItemHold);
+		console.log("Member Status and type: " + JSON.stringify(result[0]));
+		connection.query(queryItemHold,function(err,resultQuery){
+			console.log("Membertype:" + result[0].membertype);
+			console.log("Count movies checked out:" + JSON.stringify(resultQuery));
+			if(resultQuery.length){
+				if (result[0].membertype == 1 && resultQuery[0].numberItem >= 10){
+					console.log("Premium member can't check out more than 10 movies");
+					res.send("Premium member can't check out more than 10 movies" + "<a href=\"/home\"> Back </a>");
+					return;
+				}else if (result[0].membertype == 0 && resultQuery[0].numberItem >= 2){
+					console.log("Premium member can't check out more than 10 movies");
+					res.send("Standar member can't check out more than 2 movies" + "<a href=\"/home\"> Back </a>")
+					return;
+				}else{
+					
 					if (!err) {
-						res.end(result);
-					}
-					// render or error
-					else {
-						res.end('An error occurred');
-						console.log(err);
-					}
-				});
-			}
+						var userStatus = result[0].status;
+						console.log("users status " + userStatus );
+						if (userStatus === "inactive") {
+							res.send("Can't issue movies to inactive users");
+						} else {
+							// res.render('issuedMovies.ejs');
+							ejs.renderFile('./views/issuedMovies.ejs', {
+								"member" : userInfo
+							}, function(err, result) {
+								// render on success
+								if (!err) {
+									res.end(result);
+								}
+								// render or error
+								else {
+									res.end('An error occurred');
+									console.log(err);
+								}
+							});
+						}
 
-		} else {
-			console.log("error can't edit user's status: " + err);
-		}
+					} else {
+						console.log("error can't edit user's status: " + err);
+					}
+				}
+			}
+			
+		});
+		
 
 	});
 
@@ -682,53 +711,71 @@ app
 				});
 
 // -----------ReturnIssuedMovie--------//
-app.post('/returnIssuedMovies', [ express.urlencoded(), express.json() ],
-		function(req, res) {
-			console.log("post data " + JSON.stringify(req.body));
-			var itemReturn = req.body;
-			console.log("post data " + itemReturn.membershipno);
-			var query = "Select status From Cart Where `transactionId` = " + connection.escape(itemReturn.transactionId);
-			connection.query(query, function(error, result){
-				if (error){
-					throw error;
-				}else{
-					var status = result[0].status;
-					console.log("item status: " + status);
-					if (status ==="pending"){
-						// ---Transaction------//
-						connection.beginTransaction(function(err) {
+app
+		.post(
+				'/returnIssuedMovies',
+				[ express.urlencoded(), express.json() ],
+				function(req, res) {
+					console.log("post data " + JSON.stringify(req.body));
+					var itemReturn = req.body;
+					console.log("post data " + itemReturn.membershipno);
+					var query = "Select status From Cart Where `transactionId` = "
+							+ connection.escape(itemReturn.transactionId);
+					connection
+							.query(
+									query,
+									function(error, result) {
+										if (error) {
+											throw error;
+										} else {
+											var status = result[0].status;
+											console.log("item status: "
+													+ status);
+											if (status === "pending") {
+												// ---Transaction------//
+												connection
+														.beginTransaction(function(
+																err) {
 
-							if (err) {
-								throw err;
-							}
-							movieReturnTransaction(itemReturn);
-							// --------Commit----------//
-							connection.commit(function(err) {
-								if (err) {
-									connection.rollback(function() {
-										throw err;
+															if (err) {
+																throw err;
+															}
+															movieReturnTransaction(itemReturn);
+															// --------Commit----------//
+															connection
+																	.commit(function(
+																			err) {
+																		if (err) {
+																			connection
+																					.rollback(function() {
+																						throw err;
+																					});
+																		}
+																		res
+																				.send("Add movie to cart successfully");
+																		console
+																				.log('Transaction add To Cart successfully!');
+																	});
+
+															// --------End
+															// Commit----------//
+
+															// ---End
+															// Transaction------//
+															// res.send("Successfully
+															// return movie!");
+
+														});
+
+											} else {
+												res
+														.send("Can't return a returned movie");
+											}
+										}
+
 									});
-								}
-								res.send("Add movie to cart successfully");
-								console.log('Transaction add To Cart successfully!');
-							});
 
-							// --------End Commit----------//
-
-							// ---End Transaction------//
-							//res.send("Successfully return movie!");
-
-						});
-						
-					}
-					else{
-						res.send("Can't return a returned movie");
-					}
-				}
-				
-			});
-			
-		});
+				});
 
 // -----------Edit a Movie-----------//
 app.post('/editMovie', function(req, res) {
