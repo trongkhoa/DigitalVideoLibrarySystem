@@ -94,17 +94,17 @@
 				<th></th>
 				<th></th>
 				<th></th>
-				<th></th>
 				<th>Current Balance</th>
 				<th><%=movies[0].amount%></th>
+								<th></th>
 		</tr>
 		<tr>
 				<th></th>
 				<th></th>
 				<th></th>
-				<th></th>
 				<th>Rent Movies</th>
 				<th><%=totalRent%></th>
+								<th></th>
 		</tr>
 			<tr <% if (movies[0].amount - totalRent<0){%>
 				class="danger"<%}else{
@@ -117,9 +117,9 @@
 				<th></th>
 				<th></th>
 				<th></th>
-				<th></th>
 				<th>New Balance</th>
 				<th><%=movies[0].amount - totalRent%></th>
+								<th></th>
 		</tr>		
 			</table>
 

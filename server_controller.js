@@ -326,7 +326,7 @@ app
 						var zipCode = req.param("zipCode");
 
 						var status = req.param("status");
-						
+
 						var amount = req.param("amount");
 						var oldMembershipNo = req.param("oldMembershipNo");
 
@@ -610,72 +610,113 @@ app.post('/addMovieToCart', function(req, res) {
 });
 
 // -----------Issue a Movie-----------//
-app.post('/issueMovie', function(req, res) {
-	var userInfo = req.param("member");
-	console.log("Edit member: " + userInfo);
-	// res.send("Successfully edit the member" + userInfo);
-	var query = 'Select status, membertype From customers Where membershipno='
-			+ connection.escape(userInfo);
-	console.log(query);
-//	SELECT count(*) as numberItem, status
-//	FROM  `videolibrarymanagement`.`cart` 
-//	WHERE  `membershipno` =  '789-12-4568' and `status` = 'pending'
-//	Group By `status`
-	
-	connection.query(query, function(err, result) {
-		var queryItemHold = "SELECT count(*) as numberItem, status FROM  `videolibrarymanagement`.`cart` WHERE  `membershipno` = " +
-		connection.escape(userInfo) +
-				" and `status` = 'pending' Group By `status`";
-		console.log(queryItemHold);
-		console.log("Member Status and type: " + JSON.stringify(result[0]));
-		connection.query(queryItemHold,function(err,resultQuery){
-			console.log("Membertype:" + result[0].membertype);
-			console.log("Count movies checked out:" + JSON.stringify(resultQuery));
-			if(resultQuery.length){
-				if (result[0].membertype == 1 && resultQuery[0].numberItem >= 10){
-					console.log("Premium member can't check out more than 10 movies");
-					res.send("Premium member can't check out more than 10 movies" + "<a href=\"/home\"> Back </a>");
-					return;
-				}else if (result[0].membertype == 0 && resultQuery[0].numberItem >= 2){
-					console.log("Premium member can't check out more than 10 movies");
-					res.send("Standar member can't check out more than 2 movies" + "<a href=\"/home\"> Back </a>")
-					return;
-				}else{
-					
-					if (!err) {
-						var userStatus = result[0].status;
-						console.log("users status " + userStatus );
-						if (userStatus === "inactive") {
-							res.send("Can't issue movies to inactive users");
-						} else {
-							// res.render('issuedMovies.ejs');
-							ejs.renderFile('./views/issuedMovies.ejs', {
-								"member" : userInfo
-							}, function(err, result) {
-								// render on success
-								if (!err) {
-									res.end(result);
-								}
-								// render or error
-								else {
-									res.end('An error occurred');
-									console.log(err);
-								}
-							});
-						}
+app
+		.post(
+				'/issueMovie',
+				function(req, res) {
+					var userInfo = req.param("member");
+					console.log("Edit member: " + userInfo);
+					// res.send("Successfully edit the member" + userInfo);
+					var query = 'Select status, membertype From customers Where membershipno='
+							+ connection.escape(userInfo);
+					console.log(query);
+					// SELECT count(*) as numberItem, status
+					// FROM `videolibrarymanagement`.`cart`
+					// WHERE `membershipno` = '789-12-4568' and `status` =
+					// 'pending'
+					// Group By `status`
 
-					} else {
-						console.log("error can't edit user's status: " + err);
-					}
-				}
-			}
-			
-		});
-		
+					connection
+							.query(
+									query,
+									function(err, result) {
+										var queryItemHold = "SELECT count(*) as numberItem, status FROM  `videolibrarymanagement`.`cart` WHERE  `membershipno` = "
+												+ connection.escape(userInfo)
+												+ " and `status` = 'pending' Group By `status`";
+										console.log(queryItemHold);
+										console.log("Member Status and type: "
+												+ JSON.stringify(result[0]));
+										connection
+												.query(
+														queryItemHold,
+														function(err,
+																resultQuery) {
+															console
+																	.log("Membertype:"
+																			+ result[0].membertype);
+															console
+																	.log("Count movies checked out:"
+																			+ JSON
+																					.stringify(resultQuery));
+															if (resultQuery.length) {
+																if (result[0].membertype == 1
+																		&& resultQuery[0].numberItem >= 10) {
+																	console
+																			.log("Premium member can't check out more than 10 movies");
+																	res
+																			.send("Premium member can't check out more than 10 movies"
+																					+ "<a href=\"/home\"> Back </a>");
+																	return;
+																} else if (result[0].membertype == 0
+																		&& resultQuery[0].numberItem >= 2) {
+																	console
+																			.log("Premium member can't check out more than 10 movies");
+																	res
+																			.send("Standar member can't check out more than 2 movies"
+																					+ "<a href=\"/home\"> Back </a>")
+																	return;
+																}
+															}
 
-	});
+															if (!err) {
+																var userStatus = result[0].status;
+																console
+																		.log("users status "
+																				+ userStatus);
+																if (userStatus === "inactive") {
+																	res
+																			.send("Can't issue movies to inactive users");
+																} else {
+																	// res.render('issuedMovies.ejs');
+																	ejs
+																			.renderFile(
+																					'./views/issuedMovies.ejs',
+																					{
+																						"member" : userInfo
+																					},
+																					function(
+																							err,
+																							result) {
+																						// render
+																						// on
+																						// success
+																						if (!err) {
+																							res
+																									.end(result);
+																						}
+																						// render
+																						// or
+																						// error
+																						else {
+																							res
+																									.end('An error occurred');
+																							console
+																									.log(err);
+																						}
+																					});
+																}
 
-});
+															} else {
+																console
+																		.log("error can't edit user's status: "
+																				+ err);
+															}
+
+														});
+
+									});
+
+				});
 // -----------Return a Movie-----------//
 app
 		.post(
@@ -690,8 +731,7 @@ app
 						connection.query(query, function(err, movies) {
 							if (err) {
 								console.log("Can't return movies to DB");
-								return res
-										.send('Failed to return movies');
+								return res.send('Failed to return movies');
 							} else {
 								console.log(movies);
 								ejs.renderFile('./views/returnMovie.ejs', {
