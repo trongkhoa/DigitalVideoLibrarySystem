@@ -82,9 +82,9 @@ app.configure(function() {
 			var password = req.param("Password");
 			
 			var insertQuery = "INSERT INTO user VALUES('"+memberNo+"','"+password+"')";
-
+			console.log(insertQuery);
 			var query = "SELECT * FROM users WHERE username ='"+memberNo+"' and password = '"+password+"'";
-
+			console.log(query);
 			connection.query(query, function(err, members){
 				console.log(members);
 				if(err){
