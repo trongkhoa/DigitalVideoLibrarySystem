@@ -104,6 +104,9 @@
 
 			<button type="submit" class="btn btn-default" value="Delete Movie"
 				onclick="form.action='/deleteMovie'" id="deleteMovie" name="deleteMovie">Delete Movie</button>
+				
+			<button type="submit" class="btn btn-default" value="People who issued"
+				onclick="form.action='/movieissuedPeople'" id="people" name="seePeople">People who issued</button>
 
 			<div class="radio">
 				<% for(var i=0; i< movies.length; i++){ if (!movies[i].name){

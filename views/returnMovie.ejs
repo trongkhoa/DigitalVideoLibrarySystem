@@ -41,6 +41,7 @@
 		<div class="row">
 			<div class="col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
+					<li><a href="/home">Home</a></li>
 					<li><a href="/searchCustomer">Search Customer</a></li>
 					<li><a href="/searchMovie">Search Movie</a></li>
 					<li><a href="/addCustomer">Add Customer</a></li>
@@ -94,7 +95,7 @@
 				<th></th>
 				<th></th>
 				<th></th>
-				<th>Current Balance</th>
+				<th>Current Balance in account</th>
 				<th><%=movies[0].amount%></th>
 								<th></th>
 		</tr>
@@ -102,7 +103,7 @@
 				<th></th>
 				<th></th>
 				<th></th>
-				<th>Rent Movies</th>
+				<th>Total rent of Movies</th>
 				<th><%=totalRent%></th>
 								<th></th>
 		</tr>
@@ -117,7 +118,7 @@
 				<th></th>
 				<th></th>
 				<th></th>
-				<th>New Balance</th>
+				<th>Amount Due/New Balance</th>
 				<th><%=movies[0].amount - totalRent%></th>
 								<th></th>
 		</tr>		

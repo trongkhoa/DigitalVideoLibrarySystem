@@ -1131,6 +1131,39 @@ app
 
 				});
 
+//-----------List of people who issued movie-----------//
+app.post('/movieissuedPeople',
+				function(req, res) {
+					var movieInfo = req.param("movieId");
+					console.log("People issue movie: " + movieInfo);
+				//	var query = 'Select c.fname, c.lname, c.membershipno, m.name from customers c innerjoin cart/moviesreturn
+							+ connection.escape(movieInfo);
+					connection.query(query, function(err, result) {
+						if (!err) {
+							console.log("movie is unavailable now: " + result);
+						} else {
+							console.log("error can't edit user's status: "
+									+ err);
+						}
+
+					});
+					res.send("Successfully deleted the movie id" + movieInfo);
+
+				});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // -----------Search for All Movies in JSON------//
 app.post('/DisplayAllMoviesJSON', function(req, res) {
 	// Checking the MYSQL connection is available
