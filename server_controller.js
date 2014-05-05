@@ -81,30 +81,18 @@ app.configure(function() {
 
 			var password = req.param("Password");
 			
-			var insertQuery = "INSERT INTO user VALUES('"+memberNo+"','"+password+"')";
+			var insertQuery = "INSERT INTO users VALUES('"+memberNo+"','"+password+"', \"user\")";
 			console.log(insertQuery);
-			var query = "SELECT * FROM users WHERE username ='"+memberNo+"' and password = '"+password+"'";
-			console.log(query);
-			connection.query(query, function(err, members){
+//			var query = "SELECT * FROM users WHERE username ='"+memberNo+"' and password = '"+password+"'";
+//			console.log(query);
+			connection.query(insertQuery, function(err, members){
 				console.log(members);
 				if(err){
 					console.log("error wrong password");
-					ejs.renderFile('InvalidUser.ejs',
-							{title : title, data : data},
-							function(err, result) {
-								// render on success
-								if (!err) {
-									res.end(result);
-								}
-								// render or error
-								else {
-									res.end('An error occurred');
-									console.log(err);
-								}
-							});
+					res.send("Error can't register the user");
 				}
 				else{
-					res.redirect('/userhome');
+					res.redirect('/loginPage');
 				}
 
 			});
@@ -151,7 +139,24 @@ app.configure(function() {
 					}
 				});
 			} else {
-				res.redirect('/home');
+				if(userResults[0].roles =="admin"){
+					res.redirect('/home');
+				}else if (userResults[0].roles =="user"){
+					ejs.renderFile('./views/userhomepage.ejs', {
+						title : title,
+						data : userResults[0]
+					}, function(err, result) {
+						// render on success
+						if (!err) {
+							res.end(result);
+						}
+						// render or error
+						else {
+							res.end('An error occurred');
+							console.log(err);
+						}
+					});
+				}
 			}
 		}, req.param('userName'), req.param('Password'));
 	});
