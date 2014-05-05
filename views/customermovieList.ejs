@@ -1,0 +1,105 @@
+<% include bootstrap.ejs %>
+<html>
+<head>
+<title>Search Movie</title>
+
+<style type="text/css">
+
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 20px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #F5F5F5;
+    border-right: 1px solid #EEE;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+ #signout {
+ 	margin-top: 20px;
+ }
+</style>
+</head>
+<body>
+	
+	<div class="container-fluid">
+		
+	
+		<div class="row">
+			<div class="col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li><a href="/home">Home</a></li>
+					<li><a href="/searchCustomer">Search Customer</a></li>
+					<li><a href="/searchMovie">Search Movie</a></li>
+					<li><a href="/addCustomer">Add Customer</a></li>
+					<li><a href="/addMovie">Add Movie</a></li>
+					<li><a href="/displayMembers">Display Members</a></li>
+					<li class="active"><a href="/displayMovies">Display Movies</a></li>
+					</ul>
+					
+				</div>
+			</div>
+			<div class="col-md-10 col-md-offset-2">
+				<div class="pull-right" id="signout">
+					<form action="/loginPage">
+						<input class="btn btn-primary" type="submit" name="submit"
+						value="Sign Out" />
+					</form>
+				</div>
+				
+			<h2>Movie List</h2>
+	<table class="table table-bordered table-hover">
+		<tr>
+			<th>Movie Name</th>
+			<th>Banner Name</th>
+			<th>Release Year</th>
+			<th>Category</th>
+			<th>Rent</th>
+			<th>Available Copies</th>
+
+		</tr>
+		<form class="navbar-form navbar-left" role="submit" method="POST"
+			id="movieList" name="movieList">
+	
+			<div class="radio">
+				<% for(var i=0; i< movies.length; i++){ if (!movies[i].name){
+				continue; } %>
+				<tr
+					<% if (movies[i].status =="unavailable"){ %> class="danger" <%
+					}else{%> class="success" <%} %> >
+
+					<td><%= movies[i].name %></td>
+			<td><%= movies[i].bannerName %></td>
+			<td><%= movies[i].releaseDate %></td>
+			<td><%= movies[i].category %></td>
+			<td><%= movies[i].rentAmount %></td>
+			<td><%= movies[i].availableCopies %></td>
+		</tr>
+
+		<% } %>
+		</div>
+
+		</form>
+	</table>
+				
+			</div>
+	
+	</div>
+	
+</body>
+</html>

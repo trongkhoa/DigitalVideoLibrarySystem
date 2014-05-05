@@ -53,6 +53,83 @@ app.configure(function() {
 			}
 		});
 	});
+	
+	app.post('/register', function(req, res) {
+
+		ejs.renderFile('./views/register.ejs', {
+			title : title,
+			data : data
+		}, function(err, result) {
+			// render on success
+			if (!err) {
+				res.end(result);
+			}
+			// render or error
+			else {
+				res.end('An error occurred');
+				console.log(err);
+			}
+		});
+	});
+	
+	//--Validate new user--//
+	
+	app.post('/uservalidate', function (req, res) {
+		if (connection){
+			//Catching parameters and check if they are available or not
+			var memberNo = req.param("memNum");
+
+			var password = req.param("Password");
+			
+			var insertQuery = "INSERT INTO user VALUES('"+memberNo+"','"+password+"')";
+
+			var query = "SELECT * FROM users WHERE username ='"+memberNo+"' and password = '"+password+"'";
+
+			connection.query(query, function(err, members){
+				console.log(members);
+				if(err){
+					console.log("error wrong password");
+					ejs.renderFile('InvalidUser.ejs',
+							{title : title, data : data},
+							function(err, result) {
+								// render on success
+								if (!err) {
+									res.end(result);
+								}
+								// render or error
+								else {
+									res.end('An error occurred');
+									console.log(err);
+								}
+							});
+				}
+				else{
+					res.redirect('/userhome');
+				}
+
+			});
+
+		}
+	});
+	
+	// -- User Home page --//
+	app.get('/userhome', function(req,res){
+
+		ejs.renderFile('./views/userhomepage.ejs',
+				{title : title, data : data},
+				function(err, result) {
+					// render on success
+					if (!err) {
+						res.end(result);
+					}
+					// render or error
+					else {
+						res.end('An error occurred');
+						console.log(err);
+					}
+				});
+
+	});
 
 	app.post('/validate', function(req, res) {
 		console.log('in /Home page after clicking Sign in from login');
@@ -301,6 +378,30 @@ app.get('/searchMovie', function(req, res) {
 	});
 
 });
+
+
+app.get('/customersearchMovie', function(req, res) {
+
+	ejs.renderFile('./views/customersearchMovie.ejs', {
+		title : title,
+		data : data
+	}, function(err, result) {
+		// render on success
+		if (!err) {
+			res.end(result);
+		}
+		// render or error
+		else {
+			res.end('An error occurred');
+			console.log(err);
+		}
+	});
+
+});
+
+
+
+
 // -----------Update a Member-----------//
 app
 		.post(
@@ -1096,6 +1197,105 @@ app.post('/DisplayAllMovies', function(req, res) {
 	}
 
 });
+
+//-----------Search for All Movies------//
+app.post('/customerdisplayMovies', function(req, res) {
+	// Checking the MYSQL connection is available
+	if (connection) {
+		// Catching parameters and check if they are available or not
+		var movieName = req.param("movieName");
+
+		var movieBanner = req.param("movieBanner");
+
+		var releaseDate = req.param("rdate");
+
+		var category = req.param("category");
+
+		var availableCopies = req.param("availableCopies");
+
+		var rentAmount = req.param("rent");
+
+		// create the query for each one
+		var query = "select * from movies";
+
+		if (movieName) {
+			console.log("User want to see the Movie Name:" + movieName);
+			movieName = movieName + "%";
+			console.log(movieName);
+			// query to match the string input using LIKE in mySQL
+			query = query + " where name like " + connection.escape(movieName);
+			// if you get error, copy the line on the console log and check in
+			// your SQL terminal
+			console.log("SQL search for Movie Name:" + query);
+		} else if (movieBanner) {
+			movieBanner = movieBanner + "%";
+			console.log(movieBanner);
+			query = "select * from movies where bannerName like "
+					+ connection.escape(movieBanner);
+			console.log("SQL search for Movie Banner:" + query);
+
+		} else if (releaseDate) {
+			releaseDate = releaseDate + "%";
+			console.log(releaseDate);
+			query = "select * from movies where releaseDate like "
+					+ connection.escape(releaseDate);
+			console.log("SQL search for release Date:" + query);
+
+		} else if (category) {
+			category = category + "%";
+			console.log(category);
+			query = "select * from movies where category like "
+					+ connection.escape(category);
+			console.log("SQL search for category:" + query);
+
+		} else if (availableCopies) {
+			availableCopies = availableCopies + "%";
+			console.log(availableCopies);
+			query = "select * from movies where availableCopies like "
+					+ connection.escape(availableCopies);
+			console.log("SQL search for available copies:" + query);
+
+		} else if (rentAmount) {
+			rentAmount = rentAmount + "%";
+			console.log(rentAmount);
+			query = "select * from movies where rentAmount like "
+					+ connection.escape(rentAmount);
+			console.log("SQL search for rent Amount:" + query);
+		}
+
+		// Query and render the output of the DB to JSON objects
+		connection.query(query, function(err, movies) {
+			console.log(movies);
+			if (!err) {
+				ejs.renderFile('./views/customermovieList.ejs', {
+					"movies" : movies
+				}, // <--- JSON passed to EJS
+				function(err, result) {
+					// render on success
+					if (!err) {
+						res.end(result);
+					}
+					// render or error
+					else {
+						res.end('An error occurred');
+						console.log(err);
+					}
+				});
+
+			} else {
+				console.log("Something wrong with DB MYSQL");
+
+			}
+		});
+
+	}
+
+});
+
+
+
+
+
 
 // -----------Search for All Members JSON------//
 app.get('/DisplayAllMembersJSON', function(req, res) {
