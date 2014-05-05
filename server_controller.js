@@ -163,6 +163,47 @@ app.configure(function() {
 
 });
 
+//-- View user profile -- //
+app.get('/viewProfile', function(req,res){
+	
+	if(connection){
+
+	var memberNum = req.param('membershipno');
+
+	var query = "SELECT * FROM customers WHERE membershipno = " + connection.escape(memberNum);
+
+	console.log(memberNum);
+	connection.query(query, function(err, members){
+		console.log(members);
+		if (!err){
+			ejs.renderFile('./views/userProfile.ejs',
+					{"members":members[0]}, //<--- JSON passed to EJS
+					function(err, result) {
+						// render on success
+						if (!err) {
+							res.end(result);
+						}
+						// render or error
+						else {
+							res.end('An error occurred');
+							console.log(err);
+						}
+					});
+
+		}
+		else{
+			console.log("Something wrong with DB MYSQL");
+
+		}
+	});
+
+
+}
+
+});
+
+
+
 app.get('/home', function(req, res) {
 
 	ejs.renderFile('./views/homePage.ejs', {
