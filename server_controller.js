@@ -256,9 +256,12 @@ app
 						var state = req.param("state");
 
 						var zipCode = req.param("zipCode");
-
+						var amount =0;
+						if (memType){
+							amount =20;
+						}	
 						// create the query for each one
-						var query = 'INSERT INTO `videolibrarymanagement`.`customers` (`id`, `membershipno`, `fname`, `lname`, `address`, `city`, `state`, `zipcode`, `membertype`, `amount`) VALUES (NULL, '
+						var query = 'INSERT INTO `videolibrarymanagement`.`customers` (`id`, `membershipno`, `fname`, `lname`, `address`, `city`, `state`, `zipcode`, `membertype`, `amount`, `status`) VALUES (NULL, '
 								+ connection.escape(membershipNo)
 								+ ','
 								+ connection.escape(firstName)
@@ -273,7 +276,10 @@ app
 								+ ','
 								+ connection.escape(zipCode)
 								+ ','
-								+ connection.escape(memType) + ',\'\')';
+								+ connection.escape(memType)
+								+ ','
+								+ connection.escape(amount)
+								+ ', \"active\")';
 
 						console.log("Add a new member " + " " + memType + " "
 								+ firstName + " " + lastName + " "

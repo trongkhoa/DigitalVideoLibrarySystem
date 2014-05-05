@@ -89,7 +89,7 @@
 		</tr>
 				<% } %>
 				
-
+		<%if (movies[0]){ %>
 		<tr>
 				<th></th>
 				<th></th>
@@ -121,6 +121,7 @@
 				<th><%=movies[0].amount - totalRent%></th>
 								<th></th>
 		</tr>		
+		<%}%>
 			</table>
 
 			</form>
