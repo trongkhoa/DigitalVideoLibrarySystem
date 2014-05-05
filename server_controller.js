@@ -102,9 +102,10 @@ app.configure(function() {
 	
 	// -- User Home page --//
 	app.get('/userhome', function(req,res){
-
+		var membershipno = req.param('membershipno');
+		
 		ejs.renderFile('./views/userhomepage.ejs',
-				{title : title, data : data},
+				{data : membershipno},
 				function(err, result) {
 					// render on success
 					if (!err) {
