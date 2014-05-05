@@ -202,6 +202,50 @@ app.get('/viewProfile', function(req,res){
 
 });
 
+//-- View user profile -- //
+app.get('/viewHistory', function(req,res){
+	
+	if(connection){
+
+	var memberNum = req.param('membershipno');
+
+	
+	var query = "SELECT m.name, m.category, mr.issuedDate, mr.returnDate, m.rentAmount FROM moviesreturn mr INNER JOIN movies m on mr.movieId = m.id INNER JOIN customers s on mr.membershipNo = s.membershipno where mr.membershipNo = "
+		+ connection.escape(memberNum);
+	
+	//var query = "SELECT * FROM customers WHERE membershipno = " + connection.escape(memberNum);
+
+	console.log(memberNum);
+	connection.query(query, function(err, movies){
+		console.log(movies);
+		if (!err){
+			ejs.renderFile('./views/userHistory.ejs',
+					{"movies":movies}, //<--- JSON passed to EJS
+					function(err, result) {
+						// render on success
+						if (!err) {
+							res.end(result);
+						}
+						// render or error
+						else {
+							res.end('An error occurred');
+							console.log(err);
+						}
+					});
+
+		}
+		else{
+			console.log("Something wrong with DB MYSQL");
+
+		}
+	});
+
+
+}
+
+});
+
+
 
 
 app.get('/home', function(req, res) {
