@@ -244,7 +244,7 @@ app
 						var rentAmount = req.param("rentAmount");
 
 						// create the query for each one
-						var query = 'INSERT INTO `videolibrarymanagement`.`movies` (`id`, `name`, `bannerName`, `releaseDate`, `category`, `rentAmount`, `availableCopies`) VALUES (NULL, '
+						var query = 'INSERT INTO `videolibrarymanagement`.`movies` (`id`, `name`, `bannerName`, `releaseDate`, `category`, `rentAmount`, `availableCopies`, `status`) VALUES (NULL, '
 								+ connection.escape(movieName)
 								+ ','
 								+ connection.escape(movieBanner)
@@ -255,7 +255,7 @@ app
 								+ ','
 								+ connection.escape(rentAmount)
 								+ ','
-								+ connection.escape(availableCopies) + ' )';
+								+ connection.escape(availableCopies) + ',"available" )';
 
 						console.log("Add a new movie " + " " + movieName + " "
 								+ movieBanner + " " + releaseDate + " "
